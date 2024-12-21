@@ -1,1 +1,1 @@
-This isa a project about MLM investing platform called GoldSkill.
+This is a project about MLM investing platform called GoldSkill.
