@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -20,16 +15,16 @@ model User {
   name      String?
   role      Role     @default(USER)
   isActive  Boolean  @default(true)
-  referenceId String @deafult(NULL)
-  password
+  referenceId String @default("ref")
+  password  String 
   hasMarketingAgreement Boolean @default(true)
   hasRODOAgreement Boolean @default(true)
-  childrenList User[]
+  partnerId Int?
+  partner User? @relation("UserChildren", fields: [partnerId], references: [id])
+  children User[] @relation("UserChildren")
   payments     Payment[]
   subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
   subscriptionId Int?
-  partner     User @relation(fields: [partnerId], references: [id])
-  partnerId Int @deafult(NULL)
 }
 
 model Payment {
@@ -42,7 +37,7 @@ model Payment {
 }
 
 model Subscription {
-  id             Int      @id @default(autoincrement())
+  id             Int      @id @default(autoincrement()) @unique
   createdAt      DateTime @default(now())
   name           String
   description    String
@@ -50,6 +45,7 @@ model Subscription {
   currency       String
   period         Int
   isActive       Boolean  @default(true)
+  users User[]
 }
 
 enum Role {
