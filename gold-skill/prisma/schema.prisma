@@ -8,35 +8,38 @@ datasource db {
 }
 
 model User {
-  id                    Int           @id @default(autoincrement())
+  id                    String        @id @default(cuid())
   createdAt             DateTime      @default(now())
   email                 String        @unique
   name                  String?
   role                  Role          @default(USER)
   isActive              Boolean       @default(true)
-  referenceId           String        @default("ref")
-  password              String
+  referenceId           String        @unique @default(cuid())
+  hashedPassword        String
   hasMarketingAgreement Boolean       @default(true)
   hasRODOAgreement      Boolean       @default(true)
-  partnerId             Int?
+  partnerId             String?
   partner               User?         @relation("UserChildren", fields: [partnerId], references: [id])
   children              User[]        @relation("UserChildren")
   payments              Payment[]
   subscription          Subscription? @relation(fields: [subscriptionId], references: [id])
-  subscriptionId        Int?
+  subscriptionId        String?
+
+  @@unique([email, hashedPassword])
+  @@index([id])
 }
 
 model Payment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  userId    Int
+  userId    String
   user      User     @relation(fields: [userId], references: [id])
   amount    Float
   currency  String
 }
 
 model Subscription {
-  id          Int      @id @unique @default(autoincrement())
+  id          String   @id @unique @default(cuid())
   createdAt   DateTime @default(now())
   name        String
   description String
