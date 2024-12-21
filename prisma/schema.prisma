@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true)
+  referenceId String @deafult(NULL)
+  password
+  hasMarketingAgreement Boolean @default(true)
+  hasRODOAgreement Boolean @default(true)
+  childrenList User[]
+  payments     Payment[]
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  subscriptionId Int?
+  partner     User @relation(fields: [partnerId], references: [id])
+  partnerId Int @deafult(NULL)
+}
+
+model Payment {
+  id          Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  amount       Float
+  currency     String
+}
+
+model Subscription {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  name           String
+  description    String
+  price          Float
+  currency       String
+  period         Int
+  isActive       Boolean  @default(true)
+}
+
+enum Role {
+  USER
+  ADMIN
+  ACTIVE_USER  
+}
