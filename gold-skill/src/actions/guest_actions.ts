@@ -1,9 +1,10 @@
 "use server";
 
 import prisma from "@/lib/db";
-import getPartnerId from "@/lib/getPartnerId";
+import getPartnerIdByReference from "@/lib/getPartnerId";
 
-export async function createUser(formData: FormData, refId: string | undefined) {
+
+export async function createSelfUser(formData: FormData, refId: string | undefined) {
 
     try {
 
@@ -12,7 +13,7 @@ export async function createUser(formData: FormData, refId: string | undefined) 
             name: formData.get('name') as string,
             email: formData.get('email') as string,
             hashedPassword: formData.get('password') as string,
-            partnerId: await getPartnerId(refId) as string
+            partnerId: await getPartnerIdByReference(refId) as string
         },
     })}
     catch (error) {
@@ -21,7 +22,7 @@ export async function createUser(formData: FormData, refId: string | undefined) 
 
 }
 
-export async function createPayment(formData: FormData) {
+export async function createSelfPayment(formData: FormData) {
     try {    await prisma.payment.create({
         data: {
             userId: formData.get('userId') as string,

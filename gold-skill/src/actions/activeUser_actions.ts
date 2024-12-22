@@ -2,10 +2,10 @@
 
 import prisma from "@/lib/db";
 
-export async function updateUserSubscription(formData: FormData) {
+export async function updateSelfUserSubscription(formData: FormData, userId: string) {
     try {    await prisma.user.update({
         where: {
-            id: formData.get('id') as string,
+            id: userId as string,
         },
         data: {
             subscriptionId: formData.get('subscriptionId') as string,
@@ -17,10 +17,10 @@ export async function updateUserSubscription(formData: FormData) {
 
 }
 
-export async function deleteUserSubscription(formData: FormData) {
+export async function deleteSelfUserSubscription(userId: string) {
     try {    await prisma.user.update({
         where: {
-            id: formData.get('id') as string,
+            id: userId as string,
         },
         data: {
             subscriptionId: undefined,

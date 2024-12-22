@@ -2,10 +2,10 @@
 
 import prisma from "@/lib/db";
 
-export async function updateUser(formData: FormData) {
+export async function updateSelfUser(formData: FormData, userId: string) {
     try {    await prisma.user.update({
         where: {
-            id: formData.get('id') as string,
+            id: userId as string,
         },
         data: {
             hashedPassword: formData.get('hashedPassword') as string,
