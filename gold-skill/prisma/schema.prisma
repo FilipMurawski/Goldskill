@@ -30,24 +30,28 @@ model User {
 }
 
 model Payment {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  amount    Float
-  currency  String
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  userId         String
+  subscriptionId String
+  amount         Float
+  currency       String
+
+  user         User         @relation(fields: [userId], references: [id])
+  subscription Subscription @relation(fields: [subscriptionId], references: [id])
 }
 
 model Subscription {
-  id          String   @id @unique @default(cuid())
-  createdAt   DateTime @default(now())
+  id          String    @id @unique @default(cuid())
+  createdAt   DateTime  @default(now())
   name        String
   description String
   price       Float
   currency    String
   period      Int
-  isActive    Boolean  @default(true)
+  isActive    Boolean   @default(true)
   users       User[]
+  payments    Payment[]
 }
 
 enum Role {
