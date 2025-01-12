@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import { getPartnerIdById } from "@/lib/getPartnerId";
+import { Prisma } from "@prisma/client";
 
 export async function updateUser(formData: FormData) {
     try {    await prisma.user.update({
@@ -65,6 +66,14 @@ export async function createUser(formData: FormData) {
         },
     })}
     catch (error) {
+        if(error instanceof Prisma.PrismaClientKnownRequestError) {
+                    if (error.code === "P2002"){
+                        console.log("Email already exists");
+                    }
+                    else {
+                        console.error(error.message);
+                    }
+                }
         console.error(error);
     }
 

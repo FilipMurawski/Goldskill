@@ -2,22 +2,49 @@
 
 import prisma from "@/lib/db";
 import getPartnerIdByReference from "@/lib/getPartnerId";
+import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 
 export async function createSelfUser(formData: FormData, refId: string | undefined) {
 
     try {
+        if(await getPartnerIdByReference(refId) !== undefined) {
 
-    await prisma.user.create({
-        data: {
+        const user = await prisma.user.create({
+            data: {
             name: formData.get('name') as string,
             email: formData.get('email') as string,
             hashedPassword: formData.get('password') as string,
             partnerId: await getPartnerIdByReference(refId) as string
+            
         },
-    })}
+        })
+        console.log(`${user.name}account created successfully with refId: ${refId}`);   
+    }
+     else {
+        const user = await prisma.user.create({
+            data: {
+                name: formData.get('name') as string,
+                email: formData.get('email') as string,
+                hashedPassword: formData.get('password') as string,
+            },
+        })
+        console.log(`${user.name} account created successfully without refId`); 
+    }
+}
     catch (error) {
-        console.error(error);
+        if(error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === "P2002"){
+                console.log("Email already exists");
+            } else {
+                console.error(error.message);
+            }
+        }
+        else {
+            console.error(error);
+        }
+        
     }
 
 }
