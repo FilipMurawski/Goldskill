@@ -2,9 +2,8 @@
 
 import prisma from "@/lib/db";
 import getPartnerIdByReference from "@/lib/getPartnerId";
+import sendMail from "@/lib/send-email";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
-
 
 export async function createSelfUser(formData: FormData, refId: string | undefined) {
 
@@ -20,7 +19,8 @@ export async function createSelfUser(formData: FormData, refId: string | undefin
             
         },
         })
-        console.log(`${user.name}account created successfully with refId: ${refId}`);   
+        console.log(`${user.name}account created successfully with refId: ${refId}`);
+        sendMail({email: 'GoldSkill goldskill.tradegroup@gmail.com', sendTo: user.email, subject: 'Witamy na Goldskill', text: 'test', html: "blablabla"})   
     }
      else {
         const user = await prisma.user.create({
@@ -30,7 +30,8 @@ export async function createSelfUser(formData: FormData, refId: string | undefin
                 hashedPassword: formData.get('password') as string,
             },
         })
-        console.log(`${user.name} account created successfully without refId`); 
+        console.log(`${user.name} account created successfully without refId`);
+        sendMail({email: 'GoldSkill goldskill.tradegroup@gmail.com', sendTo: user.email, subject: 'Witamy na Goldskill', text: 'test', html: "blablabla"})
     }
 }
     catch (error) {
@@ -62,5 +63,31 @@ export async function createSelfPayment(formData: FormData) {
     catch (error) {
         console.error(error);
     }
+}
+
+export async function resetPassword( formData: FormData ) {
+
+    try {
+        await prisma.user.findFirst({
+            where: {
+                email: formData.get('email') as string,
+        }})
+    }
+
+    catch (error) {
+        if(error instanceof Prisma.PrismaClientKnownRequestError) {
+                    if (error.code === "P2001"){
+                            console.log("Email does not exists");
+                        }
+                    else {
+                            console.error(error.message);
+                        }
+                }
+        else {
+            console.error(error);
+        }
+    }
+
+    
 }
 

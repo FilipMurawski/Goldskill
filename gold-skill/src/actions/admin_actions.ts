@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import { getPartnerIdById } from "@/lib/getPartnerId";
+import sendMail from "@/lib/send-email";
 import { Prisma } from "@prisma/client";
 
 export async function updateUser(formData: FormData) {
@@ -52,7 +53,7 @@ export async function createUser(formData: FormData) {
 
     try {
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
         data: {
             name: formData.get('name') as string,
             email: formData.get('email') as string,
@@ -64,7 +65,8 @@ export async function createUser(formData: FormData) {
             hasRODOAgreement: true,
             hasMarketingAgreement: formData.get('marketingAgreement') as any,
         },
-    })}
+    })
+    sendMail({email: 'GoldSkill goldskill.tradegroup@gmail.com', sendTo: user.email, subject: 'Witamy na Goldskill', text: 'test', html: "blablabla"})}
     catch (error) {
         if(error instanceof Prisma.PrismaClientKnownRequestError) {
                     if (error.code === "P2002"){
