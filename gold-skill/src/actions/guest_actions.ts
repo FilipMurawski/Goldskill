@@ -14,7 +14,7 @@ export async function createSelfUser(formData: FormData, refId: string | undefin
             data: {
             name: formData.get('name') as string,
             email: formData.get('email') as string,
-            hashedPassword: formData.get('password') as string,
+            password: formData.get('password') as string,
             partnerId: await getPartnerIdByReference(refId) as string
             
         },
@@ -27,7 +27,7 @@ export async function createSelfUser(formData: FormData, refId: string | undefin
             data: {
                 name: formData.get('name') as string,
                 email: formData.get('email') as string,
-                hashedPassword: formData.get('password') as string,
+                password: formData.get('password') as string,
             },
         })
         console.log(`${user.name} account created successfully without refId`);
@@ -89,5 +89,20 @@ export async function resetPassword( formData: FormData ) {
     }
 
     
+}
+
+export async function sendContactForm( formData: FormData ) {
+    try {
+        await prisma.contactForm.create({
+            data: {
+                name: formData.get('name') as string,
+                email: formData.get('email') as string,
+                message: formData.get('message') as string,
+            },
+        })
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
 

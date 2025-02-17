@@ -1,22 +1,89 @@
-import SignIn from "./sign-in"
+"use client"
+import { useEffect, useState } from "react";
+import Button from "./button";
+import { Hamburger } from "./hamburger";
 
 declare type header = {
-    title: string,
-    id: string,
-}
+  title: string;
+  id: string;
+};
 
-export default function navbar(headers: header[]): React.ReactNode  {
-   return (
-        <nav className="bg-black shadow-md fixed w-full z-50">
-            <div className="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
-            <a href="#home"><img src="/LogoBiel.JPG" alt="Logo" className="h-10 w-auto"/></a>
-            <ul className="hidden md:flex space-x-8">                
-                {headers.map(header => {
-                    return <li key={header.id} className="text-gray-700 hover:text-gray-900 font-medium transition duration-200"><a href={`#${header.id}`}>{header.title}</a></li>
-                }) as React.ReactNode} 
-            </ul>
-            {SignIn()}
-            </div>
-        </nav>
-    )
-}
+
+const Navbar = ({ headers, user }: { headers: header[]; user: any }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      let currentSection = "";
+
+      headers.forEach((header) => {
+        const section = document.getElementById(header.id);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            currentSection = header.id;
+          }
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check on mount
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [headers]);
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const section = document.getElementById(id);
+    if (section) {
+      window.scrollTo({
+        top: section.offsetTop - 80, // Adjust for fixed navbar height
+        behavior: "smooth",
+      });
+    }
+  };
+
+  return (
+    <nav className="bg-black shadow-md fixed w-full z-50">
+      <div className="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
+        <a href="/">
+          <img src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
+        </a>
+
+        <ul className="hidden md:flex space-x-8">
+          {headers.map((header) => (
+            <li key={header.id} className={`text-gray-300 hover:text-yellow-500 font-medium transition duration-200 active:text-yellow-500 ${
+              activeSection === header.id ? "text-yellow-500" : "hover:text-yellow-500"
+            }`}>
+              <a href={`#${header.id}`} onClick={(e) => handleSmoothScroll(e, header.id)}>{header.title}</a>
+            </li>
+          ))}
+        </ul>
+
+        <Hamburger active={isMenuOpen} setActive={setIsMenuOpen} />
+          <Button type="button" width={"160px"}>
+            <a href={user ? "/panel" : "/sign-in"}>{user ? "Panel" : "Zaloguj się"}</a>
+          </Button>
+
+      </div>
+
+      {isMenuOpen && (
+        <div className="md:hidden bg-black shadow-md absolute top-16 left-0 w-full flex flex-col items-center py-4 space-y-4">
+          {headers.map((header) => (
+            <a key={header.id} href={`#${header.id}`} onClick={(e) => handleSmoothScroll(e, header.id)} className={`text-gray-300 scroll-smooth hover:text-yellow-500 font-medium transition duration-200 active:text-yellow-500 ${
+              activeSection === header.id ? "text-yellow-500" : "hover:text-yellow-500"
+            }`}>
+              {header.title}
+            </a>
+          ))}
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export { Navbar };

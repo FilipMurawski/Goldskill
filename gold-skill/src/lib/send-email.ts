@@ -12,7 +12,7 @@ export async function sendMail({
   html,
 }: {
   email: string;
-  sendTo?: string;
+  sendTo: string | null;
   subject: string;
   text: string;
   html?: string;
