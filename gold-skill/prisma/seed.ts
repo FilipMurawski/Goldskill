@@ -1,34 +1,34 @@
-import { Prisma, PrismaClient, User } from '@prisma/client'
+import { Prisma, PrismaClient, Role } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-const initialSubscriptions: Prisma.SubscriptionCreateInput[] =[
+const initialSubscriptions: Prisma.SubscriptionCreateInput[] = [
     {
         id: '123',
-        name: 'sub1',
-        currency: 'PLN',
-        price: 130,
-        description: 'test description',
-        period: 1,
+        name: 'Pakiet miesięczny',
+        currency: 'EUR',
+        price: 99,
+        description: '🎯 Gotowe analizy i „gotowce” do działania,📚 Spójna i praktyczna edukacja,👑 Udział w ekskluzywnej Strefie VIP',
+        period: 30,
         isActive: true
     },
     {
         id: '321',
-        name: 'sub2',
-        currency: 'USD',
-        price: 50,
-        description: 'test description123',
-        period: 3,
+        name: 'Pakiet półroczny',
+        currency: 'EUR',
+        price: 499,
+        description: '🔥 Zbuduj solidne fundamenty tradingu,🛠 Wsparcie edukatorów i strategii,⚡ Dostęp do najlepszych „gotowców”',
+        period: 180,
         isActive: true
     },
     {
         id: '222',
-        name: 'sub3',
-        currency: 'USD',
-        price: 80,
-        description: 'test description123123',
-        period: 6,
-        isActive: false
+        name: 'Pakiet roczny',
+        currency: 'EUR',
+        price: 998,
+        description: '💰 Pełna transformacja w skutecznego tradera,📊 Kompleksowa wiedza i praktyka,🚀 Elitarne środowisko i unikalne okazje',
+        period: 360,
+        isActive: true
     },
     {
         id: '999',
@@ -41,7 +41,7 @@ const initialSubscriptions: Prisma.SubscriptionCreateInput[] =[
     }
 ];
 
-const initialUsers: Prisma.UserCreateInput[] = [
+const initialUsers = [
     {
         id: 'admin',
         email: 'admin@example.com',
@@ -50,13 +50,9 @@ const initialUsers: Prisma.UserCreateInput[] = [
         hasRODOAgreement: true,
         hasMarketingAgreement: true,
         referenceId: 'main',
-        role: 'ADMIN',
+        role: 'ADMIN' as Role,
         isActive: true,
-        subscription: {
-            connect: {
-                id: '999',
-            },
-        },       
+        partnerId: null
     },
     {
         id: 'alice',
@@ -66,18 +62,9 @@ const initialUsers: Prisma.UserCreateInput[] = [
         hasRODOAgreement: true,
         hasMarketingAgreement: true,
         isActive: true,
-        role: 'ACTIVE_USER',
+        role: 'ACTIVE_USER' as Role,
         referenceId: 'ref_alice',
-        partner: {
-            connect: {
-                id: 'admin',
-            },
-        },
-        subscription: {
-            connect: {
-                id: '999',
-            },
-        }
+        partnerId: 'admin'
     },
     {
         id: 'bob',
@@ -87,13 +74,9 @@ const initialUsers: Prisma.UserCreateInput[] = [
         hasRODOAgreement: false,
         hasMarketingAgreement: false,
         isActive: false,
-        role: 'USER',
+        role: 'USER' as Role,
         referenceId: 'ref_bob',
-        partner: {
-            connect: {
-                id: 'admin',
-            },
-        },
+        partnerId: 'admin'
     },
     {
         id: "charlie",
@@ -104,18 +87,10 @@ const initialUsers: Prisma.UserCreateInput[] = [
         hasMarketingAgreement: false,
         isActive: true,
         referenceId: 'ref_charlie',
-        role: 'ACTIVE_USER',
-        partner: {
-            connect: {
-                id: 'bob',
-            },
-        },
-        subscription: {
-            connect: {
-                id: '222',
-            },
-        } 
-    },{
+        role: 'ACTIVE_USER' as Role,
+        partnerId: 'bob'
+    },
+    {
         id: 'david',
         email: 'david@example.com',
         name: 'David',
@@ -124,81 +99,103 @@ const initialUsers: Prisma.UserCreateInput[] = [
         hasMarketingAgreement: true,
         isActive: true,
         referenceId: 'ref_david',
-        role: 'ACTIVE_USER',
-        partner: {
-            connect: {
-                id: 'admin',
-            },
-        },
-        subscription: {
-            connect: {
-                id: '123',
-            },
-        } 
-    }
-];
-
-const initialPayments: Prisma.PaymentCreateManyInput[] = [
-    {
-        id: '12345',
-        amount: 130,
-        currency: 'PLN',
-        userId: 'bob',
-        subscriptionId: '123',
-    },
-    {
-        id: '67890',
-        amount: 80,
-        currency: 'USD',
-        userId: 'charlie',
-        subscriptionId: '222',
-    },
-    {
-        id: '13579',
-        amount: 130,
-        currency: 'PLN',
-        userId: 'david',
-        subscriptionId: '123',
-    },
-    {
-        id: '36901',
-        amount: 50,
-        currency: 'USD',
-        userId: 'charlie',
-        subscriptionId: '321',
+        role: 'ACTIVE_USER' as Role,
+        partnerId: 'admin'
     }
 ];
 
 async function main() {
     console.log('Starting seeding ...');
-    
+
+    // Insert subscriptions
     for (const subscription of initialSubscriptions) {
-        const newSubscription = await prisma.subscription.create({
-            data: subscription,
-        })
-        console.log(`Created subscription with ID: ${newSubscription.id}`)
+        await prisma.subscription.upsert({
+            where: { id: subscription.id },
+            update: {},
+            create: subscription
+        });
     }
 
+    console.log('Inserted subscriptions ✅');
+
+    // Insert users
     for (const user of initialUsers) {
-        const newUser = await prisma.user.create({
-            data: user,
-        })
-        console.log(`Created user with ID: ${newUser.id}`)
+        await prisma.user.upsert({
+            where: { id: user.id },
+            update: {},
+            create: user
+        });
     }
 
-    const payments = await prisma.payment.createMany({
-            data: initialPayments,
-        })
-    console.log(`Created:  ${payments.count} payments`)
+    console.log('Inserted users ✅');
+
+    // Insert user subscriptions
+    const userSubscriptions = [
+        { userId: 'admin', subscriptionId: '999' },
+        { userId: 'alice', subscriptionId: '999' },
+        { userId: 'charlie', subscriptionId: '222' },
+        { userId: 'david', subscriptionId: '123' }
+    ];
+
+    for (const us of userSubscriptions) {
+        await prisma.userSubscription.upsert({
+            where: { userId: us.userId },
+            update: {},
+            create: us
+        });
+    }
+
+    console.log('Inserted user subscriptions ✅');
+
+    // Insert payments (after subscriptions exist)
+    const initialPayments = [
+        {
+            id: '12345',
+            amount: 130,
+            currency: 'PLN',
+            userId: 'bob',
+            subscriptionId: '123' // Ensure subscription exists
+        },
+        {
+            id: '67890',
+            amount: 80,
+            currency: 'USD',
+            userId: 'charlie',
+            subscriptionId: '222'
+        },
+        {
+            id: '13579',
+            amount: 130,
+            currency: 'PLN',
+            userId: 'david',
+            subscriptionId: '123'
+        },
+        {
+            id: '36901',
+            amount: 50,
+            currency: 'USD',
+            userId: 'charlie',
+            subscriptionId: '321'
+        }
+    ];
+
+    for (const payment of initialPayments) {
+        await prisma.payment.create({
+            data: payment
+        });
+    }
+
+    console.log('Inserted payments ✅');
 
     console.log('Seeding finished ...');
 }
+
 main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+    .then(async () => {
+        await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+        console.error(e);
+        await prisma.$disconnect();
+        process.exit(1);
+    });

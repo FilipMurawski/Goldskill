@@ -2,8 +2,11 @@
 
 import prisma from "@/lib/db";
 
-export default async function getPartnerIdByReference(refId: string | undefined){
+export default async function getPartnerIdByReference(refId: string | null){
     try {
+    if (refId === null || refId === ""){
+        return null;
+    }
     const partner = await prisma.user.findFirstOrThrow({
         where: {
             referenceId: refId
@@ -19,8 +22,11 @@ export default async function getPartnerIdByReference(refId: string | undefined)
 }   
 }
 
-export async function getPartnerIdById(id: string | undefined) {
+export async function getPartnerIdById(id: string | null) {
     try {
+        if (id === null){
+            return null;
+        }
         const partner = await prisma.user.findFirstOrThrow({
             where: {
                 id: id
@@ -35,3 +41,5 @@ export async function getPartnerIdById(id: string | undefined) {
         console.error(err)
     }
 }
+
+

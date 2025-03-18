@@ -33,8 +33,8 @@ const Linkbar = ({ links,user }: { user: User | undefined, links: link[] }) => {
         </ul>
 
         <Hamburger active={isMenuOpen} setActive={setIsMenuOpen} />
-          <Button type="button" width={"160px"}>
-            <a href={user ? "/panel" : "/sign-in"}>{user ? "Panel" : "Zaloguj się"}</a>
+          <Button type="button" width={"160px"} reference={user ? "/panel" : "/sign-in"}>
+            {user ? "Panel" : "Zaloguj się"}
           </Button>
 
       </div>

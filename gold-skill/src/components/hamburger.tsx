@@ -4,7 +4,7 @@ import React from "react";
 
 const Hamburger = ({ active, setActive }: { active: boolean; setActive: React.Dispatch<React.SetStateAction<boolean>> }) => {
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
         className="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-yellow-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500"

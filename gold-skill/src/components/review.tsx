@@ -1,6 +1,6 @@
 const Review = ({name, job, text, src}: {name: string, job: string, text: string, src: string}) => {
     return (
-        <li className="aspect-auto p-8 border border-gray-100 rounded-3xl bg-white  shadow-2xl shadow-gray-600/10">
+        <li className="aspect-auto p-8 border border-gray-100 rounded-3xl bg-white  shadow-2xl shadow-gray-600/10 ">
             <div className="flex gap-4 items-center">
                     <img
                         src={src}

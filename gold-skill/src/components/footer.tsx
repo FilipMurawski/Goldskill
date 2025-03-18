@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { Header } from "./header"
 
-const Footer = (): React.ReactNode => {
+const Footer = ({type}: {type: "front" | "panel"}): React.ReactNode => {
     return (
-        <div className="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
+        <div className={` pt-16 ${type === "front" ? "mx-auto px-4 md:px-24 lg:px-8" : ""} sm:max-w-xl md:max-w-full lg:max-w-screen-xl `}>
   <div className="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
     <div className="sm:col-span-2">
       <a href="#start" aria-label="Go home" title="Company" className="inline-flex items-center">
@@ -22,12 +22,8 @@ const Footer = (): React.ReactNode => {
     <div className="space-y-2 text-sm">
       <p className="text-base font-bold tracking-wide text-gray-900">Kontakt</p>
       <div className="flex">
-        <p className="mr-1 text-gray-800">Telefon:</p>
-        <a href="tel:850-123-5021" aria-label="Our phone" title="Our phone" className="transition-colors duration-300 text-blue-400 hover:text-purple-700">123-123-123</a>
-      </div>
-      <div className="flex">
         <p className="mr-1 text-gray-800">Email:</p>
-        <a href="mailto:info@lorem.mail" aria-label="Our email" title="Our email" className="transition-colors duration-300 text-blue-400 hover:text-purple-700">info@goldskill.pl</a>
+        <a href="mailto:info@goldskill.pl" aria-label="Our email" title="Our email" className="transition-colors duration-300 text-blue-400 hover:text-purple-700">info@goldskill.pl</a>
       </div>
       <div className="flex">
         <p className="mr-1 text-gray-800">NIP:</p>
@@ -37,9 +33,9 @@ const Footer = (): React.ReactNode => {
       </div>
       <div className="flex">
         <p className="mr-1 text-gray-800">Discord:</p>
-        <p aria-label="Nasz NIP" className="transition-colors duration-300 text-blue-400">
+        <a aria-label="Nasz NIP" className="transition-colors duration-300 text-blue-400" href="https://discord.gg/68JWBSpJKD" target="blank">
           GoldSkill_TradeAcademy
-        </p>
+        </a>
       </div>
     </div>
     <div>
@@ -85,6 +81,9 @@ const Footer = (): React.ReactNode => {
       <li>
         <Link href="/regulamin" className="text-sm text-gray-600 transition-colors duration-300 hover:text-yellow-500">Regulamin</Link>
       </li>
+      {type === "panel" &&       <li>
+        <Link href="/regulamin-systemu-prowizyjnego" className="text-sm text-gray-600 transition-colors duration-300 hover:text-yellow-500">Regulamin systemu prowizyjnego</Link>
+      </li>}
     </ul>
   </div>
 </div>

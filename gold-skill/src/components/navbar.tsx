@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Button from "./button";
 import { Hamburger } from "./hamburger";
+import { useReferral } from "@/lib/utility/referrals";
 
 declare type header = {
   title: string;
@@ -36,6 +37,8 @@ const Navbar = ({ headers, user }: { headers: header[]; user: any }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [headers]);
 
+  useReferral()
+
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const section = document.getElementById(id);
@@ -49,12 +52,12 @@ const Navbar = ({ headers, user }: { headers: header[]; user: any }) => {
 
   return (
     <nav className="bg-black shadow-md fixed w-full z-50">
-      <div className="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
+      <div className="container mx-auto px-4 md:px-4 lg:px-8 flex justify-between items-center h-16">
         <a href="/">
           <img src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
         </a>
 
-        <ul className="hidden md:flex space-x-8">
+        <ul className="hidden md:flex space-x-4 lg:space-x-10">
           {headers.map((header) => (
             <li key={header.id} className={`text-gray-300 hover:text-yellow-500 font-medium transition duration-200 active:text-yellow-500 ${
               activeSection === header.id ? "text-yellow-500" : "hover:text-yellow-500"
@@ -65,8 +68,8 @@ const Navbar = ({ headers, user }: { headers: header[]; user: any }) => {
         </ul>
 
         <Hamburger active={isMenuOpen} setActive={setIsMenuOpen} />
-          <Button type="button" width={"160px"}>
-            <a href={user ? "/panel" : "/sign-in"}>{user ? "Panel" : "Zaloguj się"}</a>
+          <Button type="button" width={"160px"} reference={user ? "/panel" : "/sign-in"}>
+            {user ? "Panel" : "Zaloguj się"}
           </Button>
 
       </div>

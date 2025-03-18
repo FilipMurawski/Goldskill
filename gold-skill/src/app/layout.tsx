@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { BackToTop } from "@/components/back-to-top";
-import { Footer } from "@/components/footer";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +25,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
@@ -32,7 +33,6 @@ export default function RootLayout({
       >
         {children}
         <BackToTop></BackToTop>
-        <Footer></Footer>
       </body>
     </html>
   );

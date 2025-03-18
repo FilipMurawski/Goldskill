@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { getPartnerIdById } from "@/lib/getPartnerId";
-import sendMail from "@/lib/send-email";
+import {sendMail} from "@/lib/send-email";
 import { Prisma } from "@prisma/client";
 
 export async function updateUser(formData: FormData) {
@@ -11,18 +11,17 @@ export async function updateUser(formData: FormData) {
             id: formData.get('id') as string,
         },
         data: {
-            hashedPassword: formData.get('hashedPassword') as string,
             name: formData.get('name') as string,
-            hasMarketingAgreement: formData.get('marketingAgreement') as any,
-            hasRODOAgreement: formData.get('RODOAgreement') as any,
-            role: formData.get('role') as 'USER' | 'ACTIVE_USER',
-            isActive: formData.get('isActive') as any,
+            hasMarketingAgreement: formData.get('marketingAgreement') === "true" ? true : false as boolean,
+            hasRODOAgreement: formData.get('RODOAgreement') === "true" ? true : false as boolean,
+            role: formData.get('role') as 'USER' | 'ACTIVE_USER' | 'ADMIN',
+            isActive: formData.get('isActive') === "true" ? true : false as boolean,
             subscriptionId: formData.get('subscriptionId') as string,
-            partnerId: (await getPartnerIdById(formData.get('id') as string)) == 'admin' ? formData.get('partnerId') as string : (await getPartnerIdById(formData.get('id') as string))
+            partnerId: (await getPartnerIdById(formData.get('id') as string)) == 'goldskill' ? formData.get('partnerId') as string : (await getPartnerIdById(formData.get('id') as string))
         },
     })}
     catch (error) {
-        console.error(error);
+        console?.error(error);
     }
 
 }
@@ -37,11 +36,12 @@ export async function deleteUser(formData: FormData) {
                 isActive: false,
                 subscriptionId: undefined,
                 role: 'USER',
-                name: null,
+                name: "",
                 hasRODOAgreement: false,
                 hasMarketingAgreement: false
             },
         });
+        return true
     }
     catch (error) {
         console.error(error);
@@ -57,7 +57,7 @@ export async function createUser(formData: FormData) {
         data: {
             name: formData.get('name') as string,
             email: formData.get('email') as string,
-            hashedPassword: formData.get('password') as string,
+            password: formData.get('password') as string,
             partnerId: formData.get('referenceId') as string,
             isActive: formData.get('isActive') as any,
             role: formData.get('role') as 'USER' | 'ACTIVE_USER',
@@ -79,4 +79,44 @@ export async function createUser(formData: FormData) {
         console.error(error);
     }
 
+}
+
+export async function getAllUsers() {
+    try {
+        const users = await prisma.user.findMany({
+            include: {
+              userSubscription: {
+                select: {
+                  createdAt: true,
+                  id: true,
+                  subscription: {
+                    select:{
+                        name: true,
+                        period: true,
+                        price: true,
+                        description: true,
+                        isActive: true
+                    }
+                },
+                },
+              },
+              payments: {
+                select: {
+                  createdAt: true,
+                  amount: true,
+                  currency: true,
+                },
+              },
+              partner: {
+                select: {
+                    email: true
+                }
+              },
+            },
+          });
+          return users
+    }
+    catch (error) {
+        console.error(error);
+    }
 }

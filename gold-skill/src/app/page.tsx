@@ -10,25 +10,29 @@ import { Feature } from "@/components/feature";
 import reviews from "@/lib/statics/reviews";
 import { Review } from "@/components/review";
 import subscriptions from "@/lib/statics/subscriptions";
-import { Subscription } from "@/components/subscription";
+import { SubscriptionBox } from "@/components/subscription-box";
 import { Contact } from "@/components/contact";
+import Slider from "@/components/slider";
+import educators from "@/lib/statics/educators";
+import { Footer } from "@/components/footer";
 
 
 const Home = async () => {
   const session = await auth()
+  
   return(
   <>
     <Navbar headers={headers} user={session?.user}/>
-    <section className="flex justify-center items-center h-screen flex-col space-y-12 text-center px-6 sm:px-12 " id="start">
+    <section className="flex justify-center items-center h-screen flex-col space-y-12 text-center px-6 sm:px-12 pt-32 sm:pt-0" id="start">
       <img src="/LogoFull.JPG" alt="Logo GoldSkill" className="w-36 sm:w-44 md:w-52 lg:w-60 rounded-full"/>
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-800 max-w-2xl font-bold">Rozwiń swój potencjał inwestycyjny z GoldSkill</h1>
       <Header size="small">GoldSkill to wyjątkowe miejsce, gdzie doświadczenie łączy się z pasją do nauki. Oferujemy najwyższy poziom edukacji inwestycyjnej, która pozwala zrozumieć rynki finansowe i podejmować świadome decyzje. Nasze metody to sprawdzone strategie, wiedza ekspertów i zasoby, które robią różnicę.</Header>
-      <Button type="button" width={"240px"}>
-        <a href="/sign-up"> Rozpocznij swoją edukacyjną podróż 🚀 </a>
+      <Button type="button" width={"240px"} reference="/sign-up">
+      Rozpocznij swoją edukacyjną podróż 🚀
       </Button>
     </section>
     <Section id="dlaczego" wrap="no-wrap">
-      <img src="/Young man.png" className="w-[50%] min-w-52"/>
+      <img src="/Young man.png" className="w-[90%] sm:w-[50%] min-w-[16rem]"/>
       <div className="w-[50%] min-w-52 flex justify-center items-center space-y-10 flex-col">
         <Header size="big">Dlaczego GoldSkill ?</Header>
         <Header size="small">GoldSkill to więcej niż platforma edukacyjna – to wsparcie na każdym etapie Twojej inwestycyjnej drogi. Działamy od września 2022 roku, tworząc społeczność, która dzieli się wiedzą i doświadczeniem. Nasi czterej specjaliści pomagają rozwijać umiejętności inwestycyjne, oferując unikalne materiały edukacyjne. </Header>
@@ -39,6 +43,10 @@ const Home = async () => {
         </div>
       </div>
     </Section>
+    <Section id="edukatorzy" wrap="wrap">
+      <Header size="big" >Poznaj naszych ekspertów: </Header>
+      <Slider educators={educators}/>
+    </Section>
     <Section id="oferta" wrap="wrap">
       <Header size="big" >GoldSkill oferuje wszechstronną edukację, która obejmuje wszystkie kluczowe aspekty tradingu: </Header>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -48,7 +56,7 @@ const Home = async () => {
       </ul>
     </Section>
     <Section id="opinie" wrap="no-wrap">      
-      <div className="w-[50%] min-w-52 flex justify-center items-center space-y-10 flex-col">
+      <div className="md:w-[50%] w-[90%] min-w-52 flex justify-center items-center space-y-10 flex-col">
       <Header size="big">Zaufanie zbudowane na sukcesach</Header>
       <ul className=" grid lg:grid-cols-2 gap-8 grid-cols-1 ">
             {
@@ -58,23 +66,23 @@ const Home = async () => {
           }
       </ul>
       </div>
-      <img src="/man.png" alt="happy man" className="w-[50%] min-w-52"/>
+      <img src="/man.png" alt="happy man" className="w-[50%] min-w-52 order-first md:order-2 pb-6 md:pb-0"/>
     </Section>
     <Section id="cennik" wrap="wrap">
       <Header size="big">Przejrzystość cen i pełen dostęp do wiedzy</Header>
       <ul className="grid lg:grid-cols-3 gap-8 grid-cols-1">
         {
-        subscriptions.map(({cost, length, name, refcode, fullcost}) => {return (
-          <Subscription cost={cost} fullcost={fullcost} name={name} length={length} refcode={refcode} key={name}/>
+        subscriptions.filter((s)=>s.isActive && s.price !== 0).map((subscription) => {return (
+          <SubscriptionBox type="front"{...subscription} key={subscription.id} fullcost={subscription.price === 99 ? "" : subscription.price === 499 ? "595" : "1188"}/>
         )})
         }
       </ul>
     </Section>
     <Section id="partnerstwo" wrap="no-wrap">
-      <img src="/Teamwork.jpg" className="w-[50%] min-w-52 scale-90 mr-10 pt-14"/>
-      <div className="w-[50%] min-w-52 flex justify-center items-center space-y-10 flex-col">
-        <Header size="big">Zarabiaj, wspierając edukację na najwyższym poziomie</Header>
-        <Header size="small">GoldSkill oferuje wyjątkowy program partnerski, który pozwala promować nasze usługi i zarabiać na ich sukcesie. Współpracując z nami, otrzymujesz: </Header>
+      <img src="/Teamwork.jpg" className="w-[90%] sm:w-[50%] min-w-52 scale-90 sm:mr-10 sm:pt-14"/>
+      <div className="w-[90%] sm:w-[50%] min-w-52 flex justify-center items-center space-y-10 flex-col">
+        <Header size="big" classt="text-left">Zarabiaj, wspierając edukację na najwyższym poziomie</Header>
+        <Header size="small" classt="text-left">GoldSkill oferuje wyjątkowy program partnerski, który pozwala promować nasze usługi i zarabiać na ich sukcesie. Współpracując z nami, otrzymujesz: </Header>
         <div className="flex justify-center items-start w-[100%] text-gray-600 flex-col gap-3">
           <div className="flex justify-center items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -121,6 +129,7 @@ const Home = async () => {
       <Header size="small">Proszę użyj poniższego formularza, aby się z nami skontaktować. Dziękujemy!</Header>
       <Contact />
     </Section>
+    <Footer type="front"></Footer>
   </>
   )
 }

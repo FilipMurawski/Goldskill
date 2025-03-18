@@ -12,6 +12,10 @@ declare type header = {
         id: "dlaczego",
     },
     {
+        title: "Edukatorzy",
+        id: "edukatorzy",
+    },
+    {
         title: "Oferta",
         id: "oferta",
     },

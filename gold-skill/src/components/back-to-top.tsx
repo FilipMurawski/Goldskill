@@ -13,7 +13,7 @@ const BackToTop = () => {
 
     return (
         <div
-            className="fixed bottom-8 right-8 transition-opacity duration-300"
+            className="fixed bottom-8 right-8 transition-opacity duration-300 z-[30]"
             style={{ opacity: scroll > 20 ? 1 : 0, pointerEvents: scroll > 20 ? "auto" : "none" }}
         >
             <button

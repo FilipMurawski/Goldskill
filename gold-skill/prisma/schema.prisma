@@ -8,27 +8,27 @@ datasource db {
 }
 
 model User {
-  id                    String        @id @default(cuid())
-  createdAt             DateTime      @default(now())
-  updatedAt             DateTime      @updatedAt
-  email                 String?       @unique
-  emailVerified         DateTime?     @map("email_verified")
-  name                  String
+  id                    String             @id @default(cuid())
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  email                 String?            @unique
+  emailVerified         DateTime?          @map("email_verified")
+  name                  String?
   image                 String?
-  role                  Role          @default(USER)
-  isActive              Boolean       @default(true)
-  referenceId           String        @unique @default(cuid())
+  role                  Role               @default(USER)
+  isActive              Boolean            @default(true)
+  referenceId           String             @unique @default(cuid())
   password              String?
-  hasMarketingAgreement Boolean       @default(true)
-  hasRODOAgreement      Boolean       @default(true)
+  salt                  String?
+  hasMarketingAgreement Boolean            @default(true)
+  hasRODOAgreement      Boolean            @default(true)
   partnerId             String?
-  partner               User?         @relation("UserChildren", fields: [partnerId], references: [id])
-  children              User[]        @relation("UserChildren")
+  partner               User?              @relation("UserChildren", fields: [partnerId], references: [id])
+  children              User[]             @relation("UserChildren")
   payments              Payment[]
-  subscription          Subscription? @relation(fields: [subscriptionId], references: [id])
-  subscriptionId        String?
   accounts              Account[]
   sessions              Session[]
+  userSubscription      UserSubscription[]
 
   @@unique([email, password])
   @@index([id])
@@ -44,19 +44,34 @@ model Payment {
 
   user         User         @relation(fields: [userId], references: [id])
   subscription Subscription @relation(fields: [subscriptionId], references: [id])
+
+  userSubscriptionId String?
+  UserSubscription   UserSubscription? @relation(fields: [userSubscriptionId], references: [id])
 }
 
 model Subscription {
-  id          String    @id @unique @default(cuid())
-  createdAt   DateTime  @default(now())
-  name        String
-  description String
-  price       Float
-  currency    String
-  period      Int
-  isActive    Boolean   @default(true)
-  users       User[]
-  payments    Payment[]
+  id                String             @id @unique @default(cuid())
+  createdAt         DateTime           @default(now())
+  name              String
+  description       String
+  price             Float
+  currency          String
+  period            Int
+  isActive          Boolean            @default(true)
+  userSubscriptions UserSubscription[]
+  Payment           Payment[]
+}
+
+model UserSubscription {
+  id             String       @id @default(cuid())
+  userId         String       @unique
+  isActive       Boolean      @default(true)
+  subscriptionId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime?    @updatedAt
+  payments       Payment[]
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  User           User         @relation(fields: [userId], references: [id])
 }
 
 model Account {
@@ -77,14 +92,6 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
-}
-
-model ContactForm {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  name      String
-  email     String
-  message   String
 }
 
 model Session {

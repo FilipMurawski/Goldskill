@@ -1,3 +1,4 @@
+import { Footer } from "@/components/footer";
 import { Linkbar } from "@/components/linkbar";
 import { auth } from "@/lib/auth";
 import links from "@/lib/statics/links";
@@ -14,6 +15,7 @@ export default async function RootLayout({
         <Linkbar user={session?.user as User | undefined} links={links}/>
         <div className="pt-16">
         {children}
+        <Footer type="front"></Footer>
         </div>
       </>
   );
