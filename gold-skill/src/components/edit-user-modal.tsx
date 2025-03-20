@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { SubscriptionType } from "../../types/UserType";
+import { SubscriptionType, UserSubscriptionType } from "../../types/UserType";
 
 type EditUserModalProps = {
   user: {
@@ -11,7 +11,7 @@ type EditUserModalProps = {
     isActive: boolean;
     hasMarketingAgreement: boolean;
     hasRODOAgreement: boolean;
-    subscriptionId?: string;
+    userSubscription?: UserSubscriptionType[];
     partnerId?: string | null;
   } | null;
   subscriptions: SubscriptionType[];
@@ -31,7 +31,7 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
       isActive: user?.isActive,
       hasMarketingAgreement: user?.hasMarketingAgreement,
       hasRODOAgreement: user?.hasRODOAgreement,
-      subscriptionId: user?.subscriptionId,
+      subscriptionName: user?.userSubscription && user.userSubscription[0] && user.userSubscription[0].subscription?.name,
       partnerId: user?.partnerId || "",
     },
   });
@@ -47,7 +47,7 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
     formData.append("isActive", String(data.isActive));
     formData.append("marketingAgreement", String(data.hasMarketingAgreement));
     formData.append("RODOAgreement", String(data.hasRODOAgreement));
-    formData.append("subscriptionId", data.subscriptionId);
+    formData.append("subscriptionName", data.subscriptionName);
     formData.append("partnerId", data.partnerId);
 
     onSave(formData);
@@ -92,10 +92,10 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
 
           <div>
             <label className="block text-sm font-medium text-gray-700">Subscription</label>
-            <select {...register("subscriptionId")} className="border p-2 w-full rounded" defaultValue={user?.subscriptionId}>
+            <select {...register("subscriptionName")} className="border p-2 w-full rounded" defaultValue={user?.userSubscription && user.userSubscription[0] && user.userSubscription[0].subscription?.name}>
               <option value="">No Subscription</option>
               {subscriptions.map((sub) => (
-                <option key={sub.id} value={sub.id}>
+                <option key={sub.name} value={sub.name}>
                   {sub.name}
                 </option>
               ))}

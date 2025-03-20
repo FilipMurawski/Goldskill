@@ -59,7 +59,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             email: String(credentials.email),
           },
           include: {
-            UserSubscription: {
+            userSubscription: {
               select: {
                 isActive: true,
                 subscription: {
@@ -84,7 +84,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (user.emailVerified === null) {
           throw new NotVerifiedError();
         }
-        if (!user.UserSubscription || user.UserSubscription.filter((userSubscription) => userSubscription.isActive).length === 0) {
+        if (!user.userSubscription || user.userSubscription.filter((userSubscription) => userSubscription.isActive).length === 0) {
           redirect("/subscription"); // Redirect if no active subscription
         }
         return {
@@ -93,7 +93,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           role: user.role,
           isActive: user.isActive,
-          subscription: user.UserSubscription
+          subscription: user.userSubscription
         };
       },
     }),

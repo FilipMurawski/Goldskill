@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react";
-import sendMail from "@/lib/send-email";
 import Button from "./button";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { resetPassword } from "@/actions/guest_actions";
 
 type Inputs = {
     email: string,
@@ -20,14 +20,10 @@ const Forgot_password_Form = () => {
         mode: "onBlur"
     });
 
-    const onSubmitHandler: SubmitHandler<Inputs> = (data) => {
-        sendMail({
-            email: "goldskill@gmail.com",
-            sendTo: data.email,
-            subject: "Goldskill",
-            text: "test",
-            html: "test"
-        });
+    const onSubmitHandler: SubmitHandler<Inputs> = async (data) => {
+        const form = new FormData();
+        form.append("email", data.email);
+        await resetPassword(form);
         setSuccessMessage("Na podany adres email została wysłana wiadomość. Jeśli podałeś prawidłowy adres email sprawdź swoją skrzynkę odbiorczą oraz folder Spam.");
     };
 

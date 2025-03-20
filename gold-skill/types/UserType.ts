@@ -8,6 +8,7 @@ export type PaymentType = {
     subscription: SubscriptionType;
     createdAt: Date;
     id: string;
+    isActive: boolean;
   };
   
   export type SubscriptionType = {
@@ -30,7 +31,7 @@ export type PaymentType = {
     isActive: boolean;
     createdAt: Date;
     partnerId?: string | null;
-    userSubscription?: UserSubscriptionType | null;
+    userSubscription?: UserSubscriptionType[];
     payments: PaymentType[];
     hasMarketingAgreement: boolean;
     hasRODOAgreement: boolean;

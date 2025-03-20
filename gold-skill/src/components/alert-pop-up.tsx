@@ -14,7 +14,7 @@ const Alert = () => {
         }
     }, [searchParams]);
     return (
-        <div className={`bg-yellow-200 text-yellow-800 p-3 mb-4 rounded fixed top-6 m-auto w-full ${alertMessage === "" ? "hidden" : ""}`}>
+        <div className={`bg-yellow-200 text-yellow-800 p-3 mb-4 rounded fixed top-6 m-auto w-full z-50 ${alertMessage === "" ? "hidden" : ""}`}>
             {alertMessage}
         </div>
     )

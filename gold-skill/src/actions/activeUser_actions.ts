@@ -4,13 +4,11 @@ import prisma from "@/lib/db";
 import { subDays } from "date-fns";
 
 export async function updateSelfUserSubscription(formData: FormData, userId: string) {
-    try {    await prisma.user.update({
-        where: {
-            id: userId as string,
-        },
+    try {    await prisma.userSubscription.create({
         data: {
+            userId: userId as string,
             subscriptionId: formData.get('subscriptionId') as string,
-        },
+        }
     })}
     catch (error) {
         console.error(error);
@@ -18,19 +16,7 @@ export async function updateSelfUserSubscription(formData: FormData, userId: str
 
 }
 
-export async function deleteSelfUserSubscription(userId: string) {
-    try {    await prisma.user.update({
-        where: {
-            id: userId as string,
-        },
-        data: {
-            subscriptionId: undefined,
-        },
-    })}
-    catch (error) {
-        console.error(error);
-    }
-
+export async function deleteSelfUserSubscription(userId: string, userSubscriptionId: string) {
 }
 
 export async function getUserHierarchy(userId: string, depth = 3, isAdmin = false) {

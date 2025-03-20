@@ -1,0 +1,12 @@
+extends ../layout.pug
+
+block content 
+    p Cześć #{name},
+
+    p Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta w GoldSkill.
+       | Ustaw nowe hasło, kliknij w poniższy przycisk:
+
+    a(href=#{resetLink} style='display:inline-block;padding:10px 20px;background-color:#007bff;color:white;text-decoration:none;border-radius:5px;margin:10px 0;') Resetuj hasło
+
+    p Jeśli to nie Ty, zignoruj tego maila — Twoje dane są bezpieczne.
+    p W razie potrzeby, skontaktuj się z naszym wsparciem. 

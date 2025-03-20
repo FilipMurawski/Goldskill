@@ -5,8 +5,9 @@ import prisma from "@/lib/db";
 import getPartnerIdByReference from "@/lib/getPartnerId";
 import {sendMail} from "@/lib/send-email";
 import { Prisma } from "@prisma/client";
-import { redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 import { hashPassword } from "@/lib/utility/password";
+import crypto from "crypto";
 
 export async function createSelfUser(formData: FormData, refId: string | null) {
 
@@ -24,7 +25,7 @@ export async function createSelfUser(formData: FormData, refId: string | null) {
         },
         })
         console.log(`${user.name}account created successfully with refId: ${refId}`);
-        // sendMail({email: 'GoldSkill goldskill.tradegroup@gmail.com', sendTo: user.email, subject: 'Witamy na Goldskill', text: 'test', html: "blablabla"})   
+        return user
     }
      else {
         const user = await prisma.user.create({
@@ -37,7 +38,7 @@ export async function createSelfUser(formData: FormData, refId: string | null) {
             },
         })
         console.log(`${user.name} account created successfully without refId`);
-        // sendMail({email: 'GoldSkill goldskill.tradegroup@gmail.com', sendTo: user.email, subject: 'Witamy na Goldskill', text: 'test', html: "blablabla"})
+        return user
     }
 }
     catch (error) {
@@ -72,12 +73,44 @@ export async function createSelfPayment(formData: FormData) {
 }
 
 export async function resetPassword( formData: FormData ) {
-
+    if (!formData.get('email')){
+        console.error("Email is required");
+        return;
+    }
     try {
-        await prisma.user.findFirst({
+        const user = await prisma.user.findFirst({
             where: {
                 email: formData.get('email') as string,
         }})
+
+        if (!user?.email) {
+            console.error("User not found");
+            return;
+        }
+        const resetToken = crypto.randomBytes(32).toString("hex");
+        const hashedToken = crypto.createHmac('sha256', resetToken);
+        const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2); // Token expires in 2 hours
+
+        // Save token in database
+        await prisma.passwordResetToken.create({
+            data: {
+                userId: user.id,
+                token: hashedToken,
+                expiresAt,
+            },
+        });
+
+        const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}`;
+
+        await sendMail({
+            sender: "GoldSkill.TradeGroup@gmail.com",
+            receiver: user.email,
+            template: "password-reset",
+            locals: {
+                resetUrl: resetUrl,
+            },
+            name: user.name ? user.name : "",
+        });
     }
 
     catch (error) {
@@ -92,9 +125,7 @@ export async function resetPassword( formData: FormData ) {
         else {
             console.error(error);
         }
-    }
-
-    
+    }    
 }
 
 export async function SignIn({provider,redirect, email, password, refId}: {provider: "credentials" | "facebook" | "google", redirect?: boolean, email?: string, password?: string, refId?: string | null}) {
@@ -109,12 +140,12 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
 
 
         try {
-            const user = await prisma.user.findUnique( {
+            const existingUser = await prisma.user.findUnique( {
                 where: {
                     email: email
                 }
             })
-            if(user){
+            if(existingUser){
                 console.log("Email already exists");
                 throw new Error("Email already exists");
             }
@@ -128,11 +159,39 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
 
             // Create user in database
 
-            await createSelfUser(form, refId);
+            const user = await createSelfUser(form, refId);
+            if(!user){
+                console.error("Error creating user");
+                throw new Error("Error creating user");
+            }
 
             // Send email to confirm the email
 
-            // sendMail({email: 'GoldSkill goldskill.tradegroup@gmail.com', sendTo: email, subject: 'Goldskill - potwierdzenie hasła', text: 'Proszę potwierdź swój email', html: "blablabla"})
+            const verificationToken = crypto.randomBytes(32).toString("hex");
+            const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
+            const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24); // 24 hours expiration
+    
+            await prisma.emailVerificationToken.create(
+                {
+                    data: {
+                        userId: user.id,
+                        token: hashedToken,
+                        expiresAt: expiresAt,
+                    },
+                }
+            )
+
+            const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${verificationToken}`;
+
+            await sendMail({
+                sender: "GoldSkill.TradeGroup@gmail.com",
+                receiver: email,
+                template: "email-confirmation",
+                locals: {
+                    confirmationLink: confirmLink,
+                },
+                name: user.name ? user.name : "",
+            });
 
             // redirect to sign-in page
 

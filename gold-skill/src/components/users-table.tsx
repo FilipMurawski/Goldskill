@@ -80,7 +80,7 @@ const UsersTable = ({users, subscriptions}:{users:UserType[], subscriptions: Sub
                   {user.hasRODOAgreement ? "✅" : "❌"}
                 </td>
                 <td className="px-4 py-2">
-                  {user.userSubscription?.subscription.name || "Brak"}
+                  {user.userSubscription && user.userSubscription[0] && user.userSubscription[0].subscription?.name || "Brak"}
                 </td>
                 <td className="px-4 py-2">
                   {new Date(user.createdAt).toLocaleDateString()}
