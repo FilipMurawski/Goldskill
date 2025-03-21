@@ -7,8 +7,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { User } from "next-auth"
 import getPartnerIdByReference from "./getPartnerId";
 import { verifyPassword } from "./utility/password";
-import { redirect } from "next/navigation";
-import { UserSubscription } from "@prisma/client";
 
 class NotVerifiedError extends CredentialsSignin {
   code = "not_verified_error"
@@ -84,9 +82,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (user.emailVerified === null) {
           throw new NotVerifiedError();
         }
-        if (!user.userSubscription || user.userSubscription.filter((userSubscription) => userSubscription.isActive).length === 0) {
-          redirect("/subscription"); // Redirect if no active subscription
-        }
         return {
           id: user.id,
           email: user.email,
@@ -125,9 +120,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const redirectUrl = new URL("/sign-in", nextUrl.origin);
         redirectUrl.searchParams.append("callbackUrl", nextUrl.href);
         return Response.redirect(redirectUrl);
-      }
-      if(auth?.user.userSubscription || auth?.user?.userSubscription?.filter((userSubscription) => userSubscription.isActive).length === 0) {
-        redirect("/subscription"); // Redirect if no active subscription
       }
       return true;
     },

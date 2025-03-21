@@ -2,12 +2,11 @@
 import Alert from "@/components/alert-pop-up";
 import { BacktoStart } from "@/components/back-to-start";
 import { Signer} from "@/components/sign-in";
-import { Social_button } from "@/components/social-button";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 
 
-const  Page = () => {
-
+const  Page = async () => {
     return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">        
         <Alert />

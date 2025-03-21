@@ -199,11 +199,11 @@ export async function changePassword(formData: FormData) {
 
     try {
         // Hash the received token
-        const hashedToken = crypto.createHmac("sha256", token).digest("hex");
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
         // Find the password reset token in the database
-        const resetToken = await prisma.passwordResetToken.findUnique({
-            where: { hashedToken },
+        const resetToken = await prisma.passwordResetToken.findFirstOrThrow({
+            where: { token: hashedToken },
             include: { user: true }, // Get the associated user
         });
 
@@ -232,7 +232,6 @@ export async function changePassword(formData: FormData) {
 
         return { success: true, message: "Password changed successfully." };
     } catch (error) {
-        console.error("Error changing password:", error);
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             return { success: false, message: "Database error: " + error.message };
         }
@@ -246,14 +245,15 @@ export async function verifyEmail(token: string) {
     }
     try {
         // Hash the received token
-        const hashedToken = crypto.createHmac("sha256", token).digest("hex");
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+        console.log(hashedToken);
+        
         // Find the email verification token in the database
-        const verificationToken = await prisma.emailVerificationToken.findUnique({
+        const verificationToken = await prisma.emailVerificationToken.findFirstOrThrow({
             where: { 
-                token: hashedToken,
-                
+                token: hashedToken,                
             },
-            include: { user: true, expiresAt: true }, // Get the associated user
+            include: { user: true}, // Get the associated user
         });
 
         if (!verificationToken || !verificationToken.user) {
@@ -275,7 +275,6 @@ export async function verifyEmail(token: string) {
         });
         return { success: true, message: "Email verified successfully." };
     } catch (error) {
-        console.error("Error verifying email:", error);
         return { success: false, message: "Database error: " + error };
     }
 }

@@ -1,5 +1,5 @@
 import Alert from "@/components/alert-pop-up"
-import { Reset_Password_Form } from "@/components/reset-password-form"
+import { Verify_Email } from "@/components/verify-email";
 import Link from "next/link"
 
 

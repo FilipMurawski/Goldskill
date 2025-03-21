@@ -21,7 +21,9 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
         register,
         handleSubmit,
         formState: {errors},
-        getValues
+        getValues,
+        setError,
+        clearErrors
     } = useForm<Inputes>({
         mode: "onBlur"
     })
@@ -83,8 +85,30 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
 
     return (
         <>
-            <Social_button alt="Logo Google" name="google" path="/google.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Google`}/>
-            <Social_button alt="Logo Facebook" name="facebook" path="/facebook.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Facebook`}/>
+            <Social_button alt="Logo Google" name="google" path="/google.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Google`} click={(e) => {
+        if (type === "sign-up" && !getValues().hasRODOAgreement) {
+            e.preventDefault();
+            setError("hasRODOAgreement", {
+                type: "manual",
+                message: "Akceptacja polityki prywatności oraz ryzyka jest wymagana"
+            });
+        } else {
+            clearErrors("hasRODOAgreement");
+            SignIn({provider: "google", refId: getReferral() as string | null})
+        }
+    }}/>
+            <Social_button alt="Logo Facebook" name="facebook" path="/facebook.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Facebook`} click={(e) => {
+        if (type === "sign-up" && !getValues().hasRODOAgreement) {
+            e.preventDefault();
+            setError("hasRODOAgreement", {
+                type: "manual",
+                message: "Akceptacja polityki prywatności oraz ryzyka jest wymagana"
+            });
+        } else {
+            clearErrors("hasRODOAgreement"); // Clear error if checked
+            SignIn({provider: "facebook", refId: getReferral() as string | null})
+        }
+    }}/>
 
         <div className="mb-8 mt-4 border-b text-center mx-auto max-w-xs">
                         <div

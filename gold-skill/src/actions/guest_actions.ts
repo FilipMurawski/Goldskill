@@ -5,7 +5,7 @@ import prisma from "@/lib/db";
 import getPartnerIdByReference from "@/lib/getPartnerId";
 import {sendMail} from "@/lib/send-email";
 import { Prisma } from "@prisma/client";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { hashPassword } from "@/lib/utility/password";
 import crypto from "crypto";
 
@@ -88,7 +88,7 @@ export async function resetPassword( formData: FormData ) {
             return;
         }
         const resetToken = crypto.randomBytes(32).toString("hex");
-        const hashedToken = crypto.createHmac('sha256', resetToken);
+        const hashedToken = crypto.createHash('sha256').update(resetToken).digest("hex");
         const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2); // Token expires in 2 hours
 
         // Save token in database
@@ -103,13 +103,10 @@ export async function resetPassword( formData: FormData ) {
         const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}`;
 
         await sendMail({
-            sender: "GoldSkill.TradeGroup@gmail.com",
-            receiver: user.email,
-            template: "password-reset",
-            locals: {
-                resetUrl: resetUrl,
-            },
-            name: user.name ? user.name : "",
+            to: user.email,
+            type: "reset-password",
+            subject: "Resetowanie hasła Goldskill",
+            resetLink: resetUrl,
         });
     }
 
@@ -184,18 +181,15 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
             const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${verificationToken}`;
 
             await sendMail({
-                sender: "GoldSkill.TradeGroup@gmail.com",
-                receiver: email,
-                template: "email-confirmation",
-                locals: {
-                    confirmationLink: confirmLink,
-                },
-                name: user.name ? user.name : "",
+                to: email,
+                type: "confirm-email",
+                subject: "Potwierdź swój email z Goldskill",
+                confirmationLink: confirmLink
             });
 
             // redirect to sign-in page
 
-            return redirect("/sign-in?alert=confirm-email")
+            return redirect("/sign-in?alert=confirm-email", RedirectType.replace)
         }
         catch (error) {
                 console.error("Error during signup", error);

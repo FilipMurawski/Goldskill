@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { getPartnerIdById } from "@/lib/getPartnerId";
-import {sendMail} from "@/lib/send-email";
 import { User } from "@prisma/client";
 
 export async function updateUser(formData: FormData) {

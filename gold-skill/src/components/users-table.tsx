@@ -58,6 +58,7 @@ const UsersTable = ({users, subscriptions}:{users:UserType[], subscriptions: Sub
               <th className="px-4 py-2 text-left">RODO</th>
               <th className="px-4 py-2 text-left">Subskrybcja</th>
               <th className="px-4 py-2 text-left">Stworzony</th>
+              <th className="px-4 py-2 text-left">ID</th>
               <th className="px-4 py-2 text-left">ID Partnera</th>
               <th className="px-4 py-2 text-left">Płatności</th>
               <th className="px-4 py-2 text-left">Akcje</th>
@@ -85,6 +86,7 @@ const UsersTable = ({users, subscriptions}:{users:UserType[], subscriptions: Sub
                 <td className="px-4 py-2">
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
+                <td className="px-4 py-2">{user.id}</td>
                 <td className="px-4 py-2">{user.partnerId || "-"}</td>
                 <td className="px-4 py-2">
                   <Disclosure>

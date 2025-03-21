@@ -12,6 +12,8 @@ const Verify_Email = ()=> {
             setMessage("Invalid verification link.");
             return;
         }
+        console.log(token);
+        
         const req = verifyEmail(token)
         req.then(() => {
             setMessage("Email verified successfully! You can now log in.");

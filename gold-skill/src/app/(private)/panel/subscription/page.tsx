@@ -17,13 +17,13 @@ export default async function UsersPage() {
     if (!user) redirect('/sign-in');
     const subscription = await getSelfSubscription(user.email)
     const activeSubscription = subscription?.userSubscription.filter((sub)=> sub.isActive && sub.subscription.isActive)
-    const activeSubscriptionCreatedAt = activeSubscription ? activeSubscription[0].createdAt : undefined
-    const activeSubscriptionSubId = activeSubscription ? activeSubscription[0].subscription.period : undefined
+    const activeSubscriptionCreatedAt = (activeSubscription && activeSubscription.length > 0) ? activeSubscription[0].createdAt : undefined
+    const activeSubscriptionSubId = (activeSubscription && activeSubscription.length > 0) ? activeSubscription[0].subscription.period : undefined
     const leftdays = getDaysLeft(activeSubscriptionCreatedAt, activeSubscriptionSubId)
     return (
         <div className="flex flex-col gap-5">
             <Header size="small">Subskrybcja</Header>
-            <Subscription leftdays={leftdays} subscription={activeSubscription} subscriptions={subscriptions}/>
+            <Subscription leftdays={leftdays} subscription={(activeSubscription && activeSubscription.length > 0) ? activeSubscription : undefined} subscriptions={subscriptions}/>
         </div>
     )
 }
