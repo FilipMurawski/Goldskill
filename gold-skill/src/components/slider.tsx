@@ -7,58 +7,53 @@ declare type educator = {
     text: string,   
 }
 const Slider = ({educators}:{educators: educator[]}) => {
-    const carouselRef = useRef(null);
-    const prevButtonRef = useRef(null);
-    const nextButtonRef = useRef(null);
+    const carouselRef = useRef<HTMLDivElement | null>(null);
+    const prevButtonRef = useRef<HTMLButtonElement | null>(null);
+    const nextButtonRef = useRef<HTMLButtonElement | null>(null);
 
     useEffect(() => {
         if (!carouselRef.current) return;
-
+    
         const items = [
-            { position: 0, el: document.getElementById('carousel-item-1') as any },
-            { position: 1, el: document.getElementById('carousel-item-2') },
-            { position: 2, el: document.getElementById('carousel-item-3') },
-            { position: 3, el: document.getElementById('carousel-item-4') },
+            { position: 0, el: document.getElementById('carousel-item-1') as HTMLElement},
+            { position: 1, el: document.getElementById('carousel-item-2') as HTMLElement},
+            { position: 2, el: document.getElementById('carousel-item-3') as HTMLElement},
+            { position: 3, el: document.getElementById('carousel-item-4') as HTMLElement},
         ];
-
+    
         const options = {
             defaultPosition: 1,
             interval: 5000,
             indicators: {
                 activeClasses: 'bg-white dark:bg-gray-800',
-                inactiveClasses:
-                    'bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800',
+                inactiveClasses: 'bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800',
                 items: [
-                    { position: 0, el: document.getElementById('carousel-indicator-1') as any },
-                    { position: 1, el: document.getElementById('carousel-indicator-2') },
-                    { position: 2, el: document.getElementById('carousel-indicator-3') },
-                    { position: 3, el: document.getElementById('carousel-indicator-4') },
+                    { position: 0, el: document.getElementById('carousel-indicator-1') as HTMLElement },
+                    { position: 1, el: document.getElementById('carousel-indicator-2') as HTMLElement},
+                    { position: 2, el: document.getElementById('carousel-indicator-3') as HTMLElement},
+                    { position: 3, el: document.getElementById('carousel-indicator-4') as HTMLElement},
                 ],
             },
             onNext: () => console.log('Next slide'),
             onPrev: () => console.log('Previous slide'),
             onChange: () => console.log('Slide changed'),
         };
-
+    
         const carousel = new Carousel(carouselRef.current, items, options);
         carousel.cycle();
-
-        if (prevButtonRef.current) {
-            prevButtonRef.current.addEventListener('click', () => carousel.prev());
-        }
-        if (nextButtonRef.current) {
-            nextButtonRef.current.addEventListener('click', () => carousel.next());
-        }
-
+    
+        const prevButton = prevButtonRef.current;
+        const nextButton = nextButtonRef.current;
+    
+        if (prevButton) prevButton.addEventListener('click', () => carousel.prev());
+        if (nextButton) nextButton.addEventListener('click', () => carousel.next());
+    
         return () => {
-            if (prevButtonRef.current) {
-                prevButtonRef.current.removeEventListener('click', () => carousel.prev());
-            }
-            if (nextButtonRef.current) {
-                nextButtonRef.current.removeEventListener('click', () => carousel.next());
-            }
+            if (prevButton) prevButton.removeEventListener('click', () => carousel.prev());
+            if (nextButton) nextButton.removeEventListener('click', () => carousel.next());
         };
     }, []);
+    
 
     return (
         <div id="carousel-example" ref={carouselRef} className="relative w-full lg:w-[50%]">

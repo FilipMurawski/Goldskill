@@ -47,7 +47,7 @@ const Reset_Password_Form = () => {
             
             // Redirect to login page after a delay
             setTimeout(() => redirect("/sign-in"), 3000);
-        } catch (error) {
+        } catch {
             setErrorMessage("Wystąpił błąd podczas resetowania hasła. Spróbuj ponownie.");
         }
     };

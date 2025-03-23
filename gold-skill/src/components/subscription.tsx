@@ -33,8 +33,8 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
 }[]
 }) => {
 
-    const [currentSubscription, setCurrentSubscription] = useState(subscription)
-    const [currentDaysLeft, setCurrentDaysLeft] = useState(leftdays)
+    const [currentSubscription] = useState(subscription)
+    const [currentDaysLeft] = useState(leftdays)
     const [isCancelModalOpen, setCancelModalOpen] = useState(false);
     const [isChanging, setChanging] = useState(false)
     const [isChangeModalOpen, setChangeModalOpen] = useState(false)

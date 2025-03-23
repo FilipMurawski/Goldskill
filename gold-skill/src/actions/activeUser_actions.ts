@@ -16,8 +16,8 @@ export async function updateSelfUserSubscription(formData: FormData, userId: str
 
 }
 
-export async function deleteSelfUserSubscription(userId: string, userSubscriptionId: string) {
-}
+// export async function deleteSelfUserSubscription(userId: string, userSubscriptionId: string) {
+// }
 
 export async function getUserHierarchy(userId: string, depth = 3, isAdmin = false) {
     if (depth === 0 && !isAdmin) return [];
@@ -47,7 +47,7 @@ export async function countUsersAtEachDepth(userId: string | undefined, depth = 
     });
 
     const userCountAtCurrentLevel = users.filter((user) => user.isActive).length;
-    let result: Record<number, number> = { [level]: userCountAtCurrentLevel };
+    const result: Record<number, number> = { [level]: userCountAtCurrentLevel };
 
     if ((depth > 1 || isAdmin) && userCountAtCurrentLevel > 0) {
         for (const user of users) {
@@ -90,7 +90,7 @@ export async function getUserProvisions(userId: string | undefined, depth = 3, i
         },
     });
 
-    let result: Record<number, { id: string; payments: { amount: number; currency: string; createdAt: Date; status: "confirmed" | "unconfirmed" }[] | null }[] | null> = {
+    const result: Record<number, { id: string; payments: { amount: number; currency: string; createdAt: Date; status: "confirmed" | "unconfirmed" }[] | null }[] | null> = {
         [level]: users.map(user => ({
             id: user.id,
             payments: user.payments.map(payment => ({

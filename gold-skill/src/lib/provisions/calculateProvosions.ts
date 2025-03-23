@@ -11,9 +11,8 @@ export function calculateProvisions(
             }[] | null;
         }[] | null
     >,
-    depth = 3
 ) {
-    let provisions = {
+    const provisions = {
         level1: { confirmed: 0, unconfirmed: 0 },
         level2: { confirmed: 0, unconfirmed: 0 },
         level3: { confirmed: 0, unconfirmed: 0 },

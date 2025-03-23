@@ -84,7 +84,7 @@ const Profile = (user:{
                     name: user.name,
                     hasMarketingAgreement: user.hasMarketingAgreement
                 });
-            }, [user]);
+            }, [user, reset]);
 
     return (
         <>

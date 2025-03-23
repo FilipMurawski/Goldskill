@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import Button from "./button";
 import { Hamburger } from "./hamburger";
 import { useReferral } from "@/lib/utility/referrals";
+import { User } from "next-auth";
+import Link from "next/link";
+import Image from "next/image";
 
 declare type header = {
   title: string;
@@ -10,7 +13,7 @@ declare type header = {
 };
 
 
-const Navbar = ({ headers, user }: { headers: header[]; user: any }) => {
+const Navbar = ({ headers, user }: { headers: header[]; user: User | undefined}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
 
@@ -53,9 +56,9 @@ const Navbar = ({ headers, user }: { headers: header[]; user: any }) => {
   return (
     <nav className="bg-black shadow-md fixed w-full z-50">
       <div className="container mx-auto px-4 md:px-4 lg:px-8 flex justify-between items-center h-16">
-        <a href="/">
-          <img src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
-        </a>
+        <Link href="/">
+          <Image src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
+        </Link>
 
         <ul className="hidden md:flex space-x-4 lg:space-x-10">
           {headers.map((header) => (

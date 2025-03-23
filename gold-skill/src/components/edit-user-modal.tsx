@@ -3,6 +3,16 @@
 import { useForm } from "react-hook-form";
 import { SubscriptionType, UserSubscriptionType } from "../../types/UserType";
 
+type FormValues = {
+  name: string;
+  role: "USER" | "ACTIVE_USER" | "ADMIN";
+  isActive: boolean;
+  hasMarketingAgreement: boolean;
+  hasRODOAgreement: boolean;
+  subscriptionName: string;
+  partnerId: string;
+};
+
 type EditUserModalProps = {
   user: {
     id: string;
@@ -24,19 +34,19 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<FormValues>({
     defaultValues: {
-      name: user?.name,
-      role: user?.role,
-      isActive: user?.isActive,
-      hasMarketingAgreement: user?.hasMarketingAgreement,
-      hasRODOAgreement: user?.hasRODOAgreement,
-      subscriptionName: user?.userSubscription && user.userSubscription[0] && user.userSubscription[0].subscription?.name,
+      name: user?.name || "",
+      role: user?.role || "USER",
+      isActive: user?.isActive || true,
+      hasMarketingAgreement: user?.hasMarketingAgreement || true,
+      hasRODOAgreement: user?.hasRODOAgreement || true,
+      subscriptionName: user?.userSubscription && user.userSubscription[0] && user.userSubscription[0].subscription?.name || "",
       partnerId: user?.partnerId || "",
     },
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FormValues) => {
     if(!user){
       return
     }

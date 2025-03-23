@@ -4,6 +4,7 @@ import Button from "./button";
 import { Hamburger } from "./hamburger";
 import Link from "next/link";
 import { User } from "@prisma/client";
+import Image from "next/image";
 
 declare type link = {
     title: string,
@@ -17,9 +18,9 @@ const Linkbar = ({ links,user }: { user: User | undefined, links: link[] }) => {
   return (
     <nav className="bg-black shadow-md fixed w-full z-50">
       <div className="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
-        <a href="/">
-          <img src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
-        </a>
+        <Link href="/">
+          <Image src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
+        </Link>
 
         <ul className="hidden md:flex space-x-8">
           {links.map((link) => (
@@ -42,7 +43,7 @@ const Linkbar = ({ links,user }: { user: User | undefined, links: link[] }) => {
       {isMenuOpen && (
         <div className="md:hidden bg-black shadow-md absolute top-16 left-0 w-full flex flex-col items-center py-4 space-y-4">
           {links.map((link) => (
-            <Link href={link.id}>{link.title}</Link>
+            <Link href={link.id} key={link.id}>{link.title}</Link>
           ))}
         </div>
       )}

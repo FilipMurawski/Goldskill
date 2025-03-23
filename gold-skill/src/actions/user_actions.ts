@@ -12,7 +12,7 @@ export async function updateSelfUser(formData: FormData, email: string | undefin
             throw new Error("Email is required");
         }
 
-        const updateData: any = {
+        const updateData: Record<string, string | boolean> = {
             name: formData.get('name') as string,
             hasMarketingAgreement: formData.get("hasMarketingAgreement") === "true",
         };

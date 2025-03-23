@@ -40,7 +40,7 @@ export async function updateUser(formData: FormData) {
         if (!subType){
             return
         }
-        const newSub = await prisma.userSubscription.create({
+        await prisma.userSubscription.create({
             data: {
                 userId: user.id,
                 isActive: true,

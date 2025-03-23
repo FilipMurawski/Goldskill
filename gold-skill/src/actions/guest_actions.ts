@@ -129,7 +129,7 @@ export async function SignIn({provider,redirect, email, password, refId}: {provi
   if (provider ==  "credentials" && password !== undefined) {
     return await signIn(provider, {redirect, email, password})
   } else {
-     refId ? await signIn(provider, {callbackUrl: `/panel`, refId: refId}) : await signIn(provider)
+    return refId ? await signIn(provider, {callbackUrl: `/panel`, refId: refId}) : await signIn(provider)
   }
 }
 

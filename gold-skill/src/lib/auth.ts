@@ -7,24 +7,12 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { User } from "next-auth"
 import getPartnerIdByReference from "./getPartnerId";
 import { verifyPassword } from "./utility/password";
+import { JWT } from "next-auth/jwt";
+import { UserSubscriptionType } from "../../types/UserType";
 
 class NotVerifiedError extends CredentialsSignin {
   code = "not_verified_error"
  }
-
-const hasSubscription = ({userSubscriptions}:
-   {userSubscriptions: 
-    {isActive: boolean, 
-      subscription: {
-  isActive: boolean
-}[]
-}[]
-}) => {
-    if (!userSubscriptions || userSubscriptions.filter((userSubssciption) => userSubssciption.isActive).length === 0) {
-    return false
-    } else 
-    return true
-}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -125,7 +113,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     jwt: ({ token, user}) => {
       if (user) {
-        const u = user as unknown as any;
+        const u = user as User;
         token.role = u.role;
         token.isActive = u.isActive;
         token.referralId = u.referralId || null;
@@ -133,7 +121,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return {
           ...token,
           id: u.id,
-          randomKey: u.randomKey,
           role: u.role,
           isActive: u.isActive,
           referralId: u.referralId || null,
@@ -142,17 +129,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-    session: ({session, token}:{session: Session, token: any}) =>{
+    session: ({session, token}:{session: Session, token: JWT}) =>{
       return {
         ...session,
         user: {
           ...session.user,
           id: token.id as string,
           randomKey: token.randomKey,
-          role: token.role,
-          isActive: token.isActive,
-          referralId: token.referralId || null,
-          userSubscription: token.userSubscription || null
+          role: token.role as "USER" | "ACTIVE_USER" | "ADMIN",
+          isActive: token.isActive as boolean,
+          referralId: typeof token.referralId === "string" ? token.referralId : null,
+          userSubscription: token.userSubscription as UserSubscriptionType[] || undefined
         },
       };
     },

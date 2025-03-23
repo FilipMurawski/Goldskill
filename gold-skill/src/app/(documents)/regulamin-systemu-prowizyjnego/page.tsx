@@ -1,12 +1,13 @@
 import { Header } from "@/components/header"
 import { auth } from "@/lib/auth";
 import regulamin_systemu_prowizyjnego from "@/lib/statics/regulamin_systemu_prowizyjnego"
-import { User } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { User } from "next-auth";
+
 const page = async () => {
         const session = await auth()
         if (!session) redirect('/sign-in');
-        const user: any = session?.user;
+        const user: User = session?.user;
         if (!user || user.isActive != true) redirect('/panel');           
     return (
         <section className="flex justify-center items-center min-h-[50vh] space-y-10 text-center px-6 sm:px-12 max-w-[1368px] w-full mx-auto lg:flex-nowrap flex-wrap p-20 flex-col mb-10">        

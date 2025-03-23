@@ -5,6 +5,7 @@ import { Hamburger } from "./hamburger";
 import Link from "next/link";
 import { User } from "@prisma/client";
 import { getSelfUser } from "@/actions/user_actions";
+import Image from "next/image";
 
 declare type link = {
     title: string,
@@ -17,14 +18,14 @@ const Panelbar = ({ links,user }: { user: User, links: link[] }) => {
   useEffect(() => {
     if(!user) return;
     getSelfUser(user.email);
-}, []);
+}, [user]);
 
   return (
     <nav className="bg-black shadow-md fixed z-50 w-full lg:w-56 h-16 lg:h-full">
       <div className="container lg:px-8 flex lg:justify-start lg:items-start lg:flex-col md:gap-10 items-center justify-between px-4  lg:pt-10  mx-auto">
-        <a href="/panel">
-          <img src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
-        </a>
+        <Link href="/panel">
+          <Image src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" />
+        </Link>
 
         <ul className="hidden lg:flex lg:flex-col lg:gap-10 lg:items-start list-none">
           {links.filter(link => !((link.title === "Moja struktura" || link.title === "Moje zarobki") && (!user.isActive || user.role === "USER"))).map((link) =>
