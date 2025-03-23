@@ -25,7 +25,7 @@ const Home = async () => {
   <>
     <Navbar headers={headers} user={session?.user}/>
     <section className="flex justify-center items-center h-screen flex-col space-y-12 text-center px-6 sm:px-12 pt-32 sm:pt-0" id="start">
-      <Image src="/LogoFull.JPG" alt="Logo GoldSkill" className="w-36 sm:w-44 md:w-52 lg:w-60 rounded-full"/>
+      <Image src="/LogoFull.JPG" alt="Logo GoldSkill" className="w-36 sm:w-44 md:w-52 lg:w-60 rounded-full" width={192} height={192}/>
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-800 max-w-2xl font-bold">Rozwiń swój potencjał inwestycyjny z GoldSkill</h1>
       <Header size="small">GoldSkill to wyjątkowe miejsce, gdzie doświadczenie łączy się z pasją do nauki. Oferujemy najwyższy poziom edukacji inwestycyjnej, która pozwala zrozumieć rynki finansowe i podejmować świadome decyzje. Nasze metody to sprawdzone strategie, wiedza ekspertów i zasoby, które robią różnicę.</Header>
       <Button type="button" width={"240px"} reference="/sign-up">
@@ -33,14 +33,14 @@ const Home = async () => {
       </Button>
     </section>
     <Section id="dlaczego" wrap="no-wrap">
-      <Image src="/Young man.png" alt="young man" className="w-[90%] sm:w-[50%] min-w-[16rem]"/>
+      <Image src="/Young man.png" alt="young man" className="w-[90%] sm:w-[50%] min-w-[16rem]" width={600} height={1200}/>
       <div className="w-[50%] min-w-52 flex justify-center items-center space-y-10 flex-col">
         <Header size="big">Dlaczego GoldSkill ?</Header>
         <Header size="small">GoldSkill to więcej niż platforma edukacyjna – to wsparcie na każdym etapie Twojej inwestycyjnej drogi. Działamy od września 2022 roku, tworząc społeczność, która dzieli się wiedzą i doświadczeniem. Nasi czterej specjaliści pomagają rozwijać umiejętności inwestycyjne, oferując unikalne materiały edukacyjne. </Header>
         <div className="flex justify-center items-start space-x-[10%] space-y-[10%] w-[100%] text-gray-600 flex-col sm:flex-row sm:space-y-0 ">
-          <div className="flex justify-center flex-col items-center min-w-[calc(84%/3)] gap-4"><Image alt="A book" src="/Book.png" className="w-16 h-16 grayscale-0"/> <p>Skupiamy się na dostarczaniu solidnych fundamentów i umiejętności, które pozwolą Ci zrozumieć rynki finansowe oraz podejmować świadome decyzje inwestycyjne.</p></div>
-          <div className="flex justify-center flex-col items-center min-w-[calc(84%/3)] gap-4"><Image alt="A chart" src="/Chart.png" className="h-16 w-16 grayscale-0 scale-110 translate-y-1"/> <p>GoldSkill to społeczność, która pomaga na każdym poziomie zaawansowania. Nasi eksperci są dostępni, by odpowiadać na pytania i rozwiązywać problemy.</p></div>
-          <div className="flex justify-center flex-col items-center min-w-[calc(84%/3)] gap-4"><Image alt="magnifying glass" src="/Magnifying Glass.png" className="w-16 h-16 grayscale-0"/> <p> Dzięki dostępowi do zamkniętej grupy zawsze otrzymasz niezbędną pomoc. Dodatkowo oferujemy kompleksowe kursy, codzienne analizy i wsparcie w realnym czasie.</p></div>
+          <div className="flex justify-center flex-col items-center min-w-[calc(84%/3)] gap-4"><Image alt="A book" src="/Book.png" className="w-16 h-16 grayscale-0" width={64} height={64}/> <p>Skupiamy się na dostarczaniu solidnych fundamentów i umiejętności, które pozwolą Ci zrozumieć rynki finansowe oraz podejmować świadome decyzje inwestycyjne.</p></div>
+          <div className="flex justify-center flex-col items-center min-w-[calc(84%/3)] gap-4"><Image alt="A chart" src="/Chart.png" className="h-16 w-16 grayscale-0 scale-110 translate-y-1" width={64} height={64}/> <p>GoldSkill to społeczność, która pomaga na każdym poziomie zaawansowania. Nasi eksperci są dostępni, by odpowiadać na pytania i rozwiązywać problemy.</p></div>
+          <div className="flex justify-center flex-col items-center min-w-[calc(84%/3)] gap-4"><Image alt="magnifying glass" src="/Magnifying Glass.png" className="w-16 h-16 grayscale-0" width={64} height={64}/> <p> Dzięki dostępowi do zamkniętej grupy zawsze otrzymasz niezbędną pomoc. Dodatkowo oferujemy kompleksowe kursy, codzienne analizy i wsparcie w realnym czasie.</p></div>
         </div>
       </div>
     </Section>
@@ -67,7 +67,7 @@ const Home = async () => {
           }
       </ul>
       </div>
-      <Image src="/Man.png" alt="happy man" className="w-[50%] min-w-52 order-first md:order-2 pb-6 md:pb-0"/>
+      <Image src="/Man.png" alt="happy man" className="w-[50%] min-w-52 order-first md:order-2 pb-6 md:pb-0" width={600} height={1200}/>
     </Section>
     <Section id="cennik" wrap="wrap">
       <Header size="big">Przejrzystość cen i pełen dostęp do wiedzy</Header>
@@ -80,7 +80,7 @@ const Home = async () => {
       </ul>
     </Section>
     <Section id="partnerstwo" wrap="no-wrap">
-      <Image src="/Teamwork.jpg" alt="Group of people crossing their hands in sun formation" className="w-[90%] sm:w-[50%] min-w-52 scale-90 sm:mr-10 sm:pt-14"/>
+      <Image src="/Teamwork.jpg" alt="Group of people crossing their hands in sun formation" width={600} height={300} className="w-[90%] sm:w-[50%] min-w-52 scale-90 sm:mr-10 sm:pt-14"/>
       <div className="w-[90%] sm:w-[50%] min-w-52 flex justify-center items-center space-y-10 flex-col">
         <Header size="big" classt="text-left">Zarabiaj, wspierając edukację na najwyższym poziomie</Header>
         <Header size="small" classt="text-left">GoldSkill oferuje wyjątkowy program partnerski, który pozwala promować nasze usługi i zarabiać na ich sukcesie. Współpracując z nami, otrzymujesz: </Header>

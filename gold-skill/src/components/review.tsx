@@ -8,6 +8,8 @@ const Review = ({name, job, text, src}: {name: string, job: string, text: string
                         src={src}
                         alt="Profile"
                         className="w-12 h-12 rounded-full"
+                        width={48}
+                        height={48}
                     />  
                 <div>
                     <h6 className="text-lg text-gray-800 text-start font-bold">{name}</h6>
