@@ -99,12 +99,12 @@ const Profile = (user:{
         {!isActive && <ReferralLink referenceId={user.referenceId} />}
         {isActive && <>
             <label id="password" className="text-lg font-semibold">Wprowadź nowe hasło</label>
-                <input type="password" {...register("password", validations.password) } placeholder="Hasło" required autoComplete="password" className="w-60 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"/>
+                <input type="password" {...register("password", validations.password) } placeholder="Hasło" autoComplete="password" className="w-60 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"/>
                 <span className="text-red-600">
                     {errors?.password && errors.password.message}
                 </span>
                 <label id="confirmPassword" className="text-lg font-semibold">Potwierdź hasło</label>
-                <input type="password" {...register("confirmPassword", validations.confirmPassword)} placeholder="Potwierdź hasło" required className="w-60 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"/>
+                <input type="password" {...register("confirmPassword", validations.confirmPassword)} placeholder="Potwierdź hasło" className="w-60 px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"/>
                 <span className="text-red-600">
                     {errors?.confirmPassword && errors.confirmPassword.message}
                 </span>

@@ -18,7 +18,7 @@ const Panelbar = ({ links,user }: { user: User, links: link[] }) => {
   useEffect(() => {
     if(!user) return;
     getSelfUser(user.email);
-}, [user]);
+}, []);
 
   return (
     <nav className="bg-black shadow-md fixed z-50 w-full lg:w-56 h-16 lg:h-full">
