@@ -50,6 +50,8 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
     if(!user){
       return
     }
+    
+    
     const formData = new FormData();
     formData.append("id", user.id);
     formData.append("name", data.name);
@@ -59,7 +61,6 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
     formData.append("RODOAgreement", String(data.hasRODOAgreement));
     formData.append("subscriptionName", data.subscriptionName);
     formData.append("partnerId", data.partnerId);
-
     onSave(formData);
   };
 
@@ -102,7 +103,7 @@ export default function EditUserModal({ user, onClose, onSave, subscriptions }: 
 
           <div>
             <label className="block text-sm font-medium text-gray-700">Subscription</label>
-            <select {...register("subscriptionName")} className="border p-2 w-full rounded" defaultValue={user?.userSubscription && user.userSubscription[0] && user.userSubscription[0].subscription?.name}>
+            <select {...register("subscriptionName")} className="border p-2 w-full rounded">
               <option value="">No Subscription</option>
               {subscriptions.map((sub) => (
                 <option key={sub.name} value={sub.name}>

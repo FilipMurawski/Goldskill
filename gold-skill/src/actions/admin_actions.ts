@@ -31,27 +31,29 @@ export async function updateUser(formData: FormData) {
             }
         }
     })
-    if (formData.get('subscriptionName') !== sub?.subscription.name) {
+
+    if (formData.get('subscriptionName')?.toString() != sub?.subscription.name) {
         const subType = await prisma.subscription.findFirst({
             where: {
-                name: sub?.subscription.name
+                name: formData.get('subscriptionName')?.toString()
             }
         })
+        
         if (!subType){
             return
         }
-        await prisma.userSubscription.create({
+        const newSub = await prisma.userSubscription.create({
             data: {
                 userId: user.id,
-                isActive: true,
                 subscriptionId: subType.id
-            }
+            },           
         })
+
     }
 
 }
     catch (error) {
-        console?.error(error);
+        error || console?.error(error);
     }
 
 }
