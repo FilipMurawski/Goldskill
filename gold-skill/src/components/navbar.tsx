@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Button from "./button";
 import { Hamburger } from "./hamburger";
-import { useReferral } from "@/lib/utility/referrals";
 import { User } from "next-auth";
 import Link from "next/link";
 import Image from "next/image";
@@ -39,8 +38,6 @@ const Navbar = ({ headers, user }: { headers: header[]; user: User | undefined})
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [headers]);
-
-  useReferral()
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();

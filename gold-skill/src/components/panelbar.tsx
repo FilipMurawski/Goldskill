@@ -4,8 +4,9 @@ import Button from "./button";
 import { Hamburger } from "./hamburger";
 import Link from "next/link";
 import { User } from "@prisma/client";
-import { getSelfUser } from "@/actions/user_actions";
+
 import Image from "next/image";
+import { getSelfUser } from "@/actions/user_actions";
 
 declare type link = {
     title: string,
@@ -15,10 +16,10 @@ declare type link = {
 
 const Panelbar = ({ links,user }: { user: User, links: link[] }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  useEffect(() => {
-    if(!user) return;
-    getSelfUser(user.email);
-}, []);
+
+  useEffect(()=> {
+    getSelfUser(user.email)
+  }, [])
 
   return (
     <nav className="bg-black shadow-md fixed z-50 w-full lg:w-56 h-16 lg:h-full">

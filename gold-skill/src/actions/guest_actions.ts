@@ -44,13 +44,13 @@ export async function createSelfUser(formData: FormData, refId: string | null) {
     catch (error) {
         if(error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2002"){
-                console.log("Email already exists");
+                throw new Error(`Error creating user, email already exists: ${error}`);
             } else {
-                console.error(error.message);
+                throw new Error(`Error creating user: ${error.message}`);
             }
         }
         else {
-            console.error(error);
+            throw new Error(`Error creating user: ${error}`);
         }
         
     }
@@ -68,14 +68,13 @@ export async function createSelfPayment(formData: FormData) {
     })
 }
     catch (error) {
-        console.error(error);
+        throw new Error(`Error creating payment: ${error}`);
     }
 }
 
 export async function resetPassword( formData: FormData ) {
     if (!formData.get('email')){
-        console.error("Email is required");
-        return;
+        throw new Error(`Error reseting password --> email is required`);
     }
     try {
         const user = await prisma.user.findFirst({
@@ -84,8 +83,7 @@ export async function resetPassword( formData: FormData ) {
         }})
 
         if (!user?.email) {
-            console.error("User not found");
-            return;
+            throw new Error(`Error reseting password --> user not found`);
         }
         const resetToken = crypto.randomBytes(32).toString("hex");
         const hashedToken = crypto.createHash('sha256').update(resetToken).digest("hex");
@@ -113,14 +111,14 @@ export async function resetPassword( formData: FormData ) {
     catch (error) {
         if(error instanceof Prisma.PrismaClientKnownRequestError) {
                     if (error.code === "P2001"){
-                            console.log("Email does not exists");
+                        throw new Error(`Error reseting password: ${error.message}`);
                         }
                     else {
-                            console.error(error.message);
+                        throw new Error(`Error reseting password: ${error.message}`);
                         }
                 }
         else {
-            console.error(error);
+            throw new Error(`Error reseting password: ${error}`);
         }
     }    
 }
@@ -143,7 +141,6 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
                 }
             })
             if(existingUser){
-                console.log("Email already exists");
                 throw new Error("Email already exists");
             }
             const hashedPassword = await hashPassword(password)
@@ -158,7 +155,6 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
 
             const user = await createSelfUser(form, refId);
             if(!user){
-                console.error("Error creating user");
                 throw new Error("Error creating user");
             }
 
@@ -192,6 +188,6 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
             return redirect("/sign-in?alert=confirm-email", RedirectType.replace)
         }
         catch (error) {
-                console.error("Error during signup", error);
+            throw new Error(`Error during sign-up: ${error}`);
         }
   }

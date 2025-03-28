@@ -76,7 +76,7 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
   
             })}
             <p className="text-gray-600 mt-2">
-              {currentDaysLeft === 0
+              {currentSubscription[0].subscription.period === 999 ? "Subskrybcja na zawsze" : currentDaysLeft === 0
                 ? "Twoja subskrybcja się skończyła"
                 : `Pozostało dni: ${currentDaysLeft}`}
             </p>

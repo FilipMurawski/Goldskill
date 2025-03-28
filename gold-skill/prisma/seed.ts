@@ -1,6 +1,9 @@
-import { Prisma, PrismaClient, Role } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+
+type Role = "ADMIN" | "USER" | "ACTIVE_USER"
+
 
 const initialSubscriptions: Prisma.SubscriptionCreateInput[] = [
     {
@@ -138,10 +141,8 @@ async function main() {
     ];
 
     for (const us of userSubscriptions) {
-        await prisma.userSubscription.upsert({
-            where: { userId: us.userId },
-            update: {},
-            create: us
+        await prisma.userSubscription.create({
+            data: us
         });
     }
 

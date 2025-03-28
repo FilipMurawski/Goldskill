@@ -45,7 +45,9 @@ export async function updateSelfUser(formData: FormData, email: string | undefin
 
         return { success: true, user: myuser };
     } catch (error) {
-        console.error("Error updating user:", error);
+        if(typeof error === "object"){
+            throw new Error(`Error updating user: ${error}`);
+        }
         return { success: false, message: "Failed to update user." };
     }
 }
@@ -96,8 +98,7 @@ export async function getSelfUser(email: string | null) {
     }); 
 return user}
     catch (error) {
-        console.error(error);
-        return null
+        throw new Error(`Error getting user: ${error}`);
     }
 
 }
@@ -123,8 +124,7 @@ export async function getSelfPayments(email: string | null) {
     return payments
 }
 catch (error) {
-    console.error(error);
-    return null
+    throw new Error(`Error getting payments: ${error}`);
 }
 }
 
@@ -158,8 +158,7 @@ export async function getSelfSubscription(email: string | null) {
     return subscription
 }
 catch (error) {
-    console.error(error);
-    return null
+    throw new Error(`Error getting User subscriptions: ${error}`);
 }
 }
 
@@ -184,8 +183,7 @@ export async function getAllSubscriptions() {
     return subscriptions
 }
 catch (error) {
-    console.error(error);
-    return null
+    throw new Error(`Error getting all subscriptions: ${error}`);
 }
 }
 

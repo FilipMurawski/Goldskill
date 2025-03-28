@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { User } from "@prisma/client";
 import { subDays } from "date-fns";
 
 export async function updateSelfUserSubscription(formData: FormData, userId: string) {
@@ -11,13 +12,10 @@ export async function updateSelfUserSubscription(formData: FormData, userId: str
         }
     })}
     catch (error) {
-        console.error(error);
+        throw new Error(`Error updating subscription: ${error}`);
     }
 
 }
-
-// export async function deleteSelfUserSubscription(userId: string, userSubscriptionId: string) {
-// }
 
 export async function getUserHierarchy(userId: string, depth = 3, isAdmin = false) {
     if (depth === 0 && !isAdmin) return [];
@@ -44,7 +42,7 @@ export async function countUsersAtEachDepth(userId: string | undefined, depth = 
         select: { id: true,
             isActive: true,
          },
-    });
+    }) as User[];
 
     const userCountAtCurrentLevel = users.filter((user) => user.isActive).length;
     const result: Record<number, number> = { [level]: userCountAtCurrentLevel };

@@ -3,7 +3,6 @@
 import { SignIn, SignUp } from "@/actions/guest_actions";
 import Button from "./button";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { getReferral } from "@/lib/utility/referrals";
 import { Social_button } from "./social-button";
 import { redirect } from "next/navigation";
 
@@ -16,7 +15,7 @@ type Inputes = {
     hasRODOAgreement?: boolean
 }
 
-const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
+const Signer = ({type, refId}: {type: "sign-in" | "sign-up", refId: string | undefined}) => {
     const {
         register,
         handleSubmit,
@@ -27,7 +26,7 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
     } = useForm<Inputes>({
         mode: "onBlur"
     })
-    const onSubmitHandler: SubmitHandler<Inputes> = (data) => {
+    const onSubmitHandler: SubmitHandler<Inputes> = async  (data) => {
         if (type === "sign-in") {
             SignIn({provider: "credentials",
                 redirect: false,
@@ -37,7 +36,7 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
             SignUp({
                 email: data.email,
                 password: data.password,
-                refId: getReferral() as string | null
+                refId: refId ? refId : null
             }).then(()=> redirect("sign-in?alert=confirm-email"))
         }
     };
@@ -81,8 +80,6 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
         }
     }
 
-    
-
     return (
         <>
             <Social_button alt="Logo Google" name="google" path="/google.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Google`} click={(e) => {
@@ -94,7 +91,7 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
             });
         } else {
             clearErrors("hasRODOAgreement");
-            SignIn({provider: "google", refId: getReferral() as string | null})
+            SignIn({provider: "google", refId: refId ? refId : null})
         }
     }}/>
             <Social_button alt="Logo Facebook" name="facebook" path="/facebook.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Facebook`} click={(e) => {
@@ -106,7 +103,7 @@ const Signer = ({type}: {type: "sign-in" | "sign-up"}) => {
             });
         } else {
             clearErrors("hasRODOAgreement"); // Clear error if checked
-            SignIn({provider: "facebook", refId: getReferral() as string | null})
+            SignIn({provider: "facebook", refId: refId ? refId : null})
         }
     }}/>
 

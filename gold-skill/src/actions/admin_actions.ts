@@ -48,12 +48,13 @@ export async function updateUser(formData: FormData) {
                 subscriptionId: subType.id
             },           
         })
+        return newSub
 
     }
 
 }
     catch (error) {
-        error || console?.error(error);
+        throw new Error(`Error updating user: ${error}`);
     }
 
 }
@@ -75,7 +76,7 @@ export async function deleteUser(formData: FormData) {
         return true
     }
     catch (error) {
-        console.error(error);
+        throw new Error(`Error deleting user: ${error}`);
     }
     
 }
@@ -152,6 +153,6 @@ export async function getAllUsers() {
           return users
     }
     catch (error) {
-        console.error(error);
+        throw new Error(`Error getting users: ${error}`);
     }
 }
