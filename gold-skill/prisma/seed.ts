@@ -109,7 +109,17 @@ const initialUsers = [
 
 async function main() {
     console.log('Starting seeding ...');
-
+    if (process.env.NODE_ENV === 'production') {
+        for (const subscription of initialSubscriptions) {
+            await prisma.subscription.upsert({
+                where: { id: subscription.id },
+                update: {},
+                create: subscription
+            });
+        }
+        console.log('Seeding finished ...');
+        return;
+    } else {
     // Insert subscriptions
     for (const subscription of initialSubscriptions) {
         await prisma.subscription.upsert({
@@ -190,7 +200,7 @@ async function main() {
 
     console.log('Seeding finished ...');
 }
-
+}
 main()
     .then(async () => {
         await prisma.$disconnect();

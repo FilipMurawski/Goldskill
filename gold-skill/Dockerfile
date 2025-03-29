@@ -26,16 +26,14 @@ COPY . .
 
 RUN npx prisma generate
 
-
-
 RUN \
-    if [ -f yarn.lock ]; then yarn run build; \
-    elif [ -f package-lock.json ]; then npm run build; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+    if [ -f yarn.lock ]; then yarn run prod-build; \
+    elif [ -f package-lock.json ]; then npm run prod-build; \
+    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run prod-build; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-RUN npx prisma db push
+
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
