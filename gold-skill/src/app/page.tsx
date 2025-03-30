@@ -25,7 +25,7 @@ const Home = async () => {
   <>
     <Navbar headers={headers} user={session?.user}/>
     <section className="flex justify-center items-center h-screen flex-col space-y-12 text-center px-6 sm:px-12 pt-32 sm:pt-0" id="start">
-      <Image src="/LogoFull.JPG" alt="Logo GoldSkill" className="w-36 sm:w-44 md:w-52 lg:w-60 rounded-full" width={192} height={192}/>
+      <Image src="/Logo Full.jpg" alt="Logo GoldSkill" className="w-36 sm:w-44 md:w-52 lg:w-60 rounded-full" width={192} height={192}/>
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-800 max-w-2xl font-bold">Rozwiń swój potencjał inwestycyjny z GoldSkill</h1>
       <Header size="small">GoldSkill to wyjątkowe miejsce, gdzie doświadczenie łączy się z pasją do nauki. Oferujemy najwyższy poziom edukacji inwestycyjnej, która pozwala zrozumieć rynki finansowe i podejmować świadome decyzje. Nasze metody to sprawdzone strategie, wiedza ekspertów i zasoby, które robią różnicę.</Header>
       <Button type="button" width={"240px"} reference="/sign-up">

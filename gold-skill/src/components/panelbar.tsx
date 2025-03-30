@@ -25,7 +25,7 @@ const Panelbar = ({ links,user }: { user: User, links: link[] }) => {
     <nav className="bg-black shadow-md fixed z-50 w-full lg:w-56 h-16 lg:h-full">
       <div className="container lg:px-8 flex lg:justify-start lg:items-start lg:flex-col md:gap-10 items-center justify-between px-4  lg:pt-10  mx-auto">
         <Link href="/panel">
-          <Image src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" width={64} height={64}/>
+          <Image src="/Logo Biel.jpg" alt="Logo" className="h-16 w-auto" width={64} height={64}/>
         </Link>
 
         <ul className="hidden lg:flex lg:flex-col lg:gap-10 lg:items-start list-none">

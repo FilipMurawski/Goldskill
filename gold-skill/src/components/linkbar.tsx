@@ -19,7 +19,7 @@ const Linkbar = ({ links,user }: { user: User | undefined, links: link[] }) => {
     <nav className="bg-black shadow-md fixed w-full z-50">
       <div className="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
         <Link href="/">
-          <Image src="/LogoBiel.JPG" alt="Logo" className="h-16 w-auto" width={64} height={64}/>
+          <Image src="/Logo Biel.jpg" alt="Logo" className="h-16 w-auto" width={64} height={64}/>
         </Link>
 
         <ul className="hidden md:flex space-x-8">
