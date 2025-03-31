@@ -2,7 +2,6 @@
 
 FROM node:18-alpine AS base
 
-ENV DATABASE_URL="postgresql://postgres:0j@*xhaNfE05@host.docker.internal:5432/prodDb"
 # Install dependencies only when needed
 FROM base AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -57,7 +56,6 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
-
 
 CMD ["node", "server.js"]
 
