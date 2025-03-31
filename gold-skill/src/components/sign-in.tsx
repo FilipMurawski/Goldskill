@@ -37,7 +37,7 @@ const Signer = ({type, refId}: {type: "sign-in" | "sign-up", refId: string | und
                 email: data.email,
                 password: data.password,
                 refId: refId ? refId : null
-            }).then(()=> redirect("sign-in?alert=confirm-email"))
+            }).then(()=> redirect("/sign-in?alert=confirm-email"))
         }
     };
     

@@ -5,9 +5,10 @@ import prisma from "@/lib/db";
 import getPartnerIdByReference from "@/lib/getPartnerId";
 import {sendMail} from "@/lib/send-email";
 import { Prisma } from "@prisma/client";
-import { redirect, RedirectType } from "next/navigation";
 import { hashPassword } from "@/lib/utility/password";
 import crypto from "crypto";
+import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 export async function createSelfUser(formData: FormData, refId: string | null) {
 
@@ -184,10 +185,7 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
                 subject: "Potwierdź swój email z Goldskill",
                 confirmationLink: confirmLink
             });
-
-            // redirect to sign-in page
-
-            return redirect("/sign-in?alert=confirm-email", RedirectType.replace)
+            return 
         }
         catch (error) {
             throw new Error(`Error during sign-up: ${error}`);

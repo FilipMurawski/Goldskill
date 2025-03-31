@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "prod-build": "npx prisma generate && npx prisma migrate deploy && next build"
+    "prod-build": "npx prisma generate && npx prisma migrate deploy && npx prisma db seed && next build"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
