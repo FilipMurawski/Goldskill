@@ -42,7 +42,7 @@ const Reset_Password_Form = () => {
 
         try {
             await changePassword(form);
-            setSuccessMessage("Twoje hasło zostało pomyślnie zmienione. Za cwhilę zostaniesz przekierowany na stronę logowania");
+            setSuccessMessage("Twoje hasło zostało pomyślnie zmienione. Za chwilę zostaniesz przekierowany na stronę logowania");
             setErrorMessage("");
             
             // Redirect to login page after a delay

@@ -20,10 +20,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Facebook({async profile(profile, tokens) {
       return { role: profile.role ?? "USER", id: profile.id, name: profile.name, email: profile.email, isActive: profile.isActive, referralId: tokens.refId || undefined, userSubscription: profile.userSubscription} as User
-    }}),
-    google({async profile(profile, tokens) {
+    },
+    clientId: process.env.AUTH_FACEBOOK_ID,
+    clientSecret: process.env.AUTH_FACEBOOK_SECRET}),
+    google({async profile(profile, tokens){
       return { role: profile.role ?? "USER", id: profile.id, name: profile.name, email: profile.email, isActive: profile.isActive, referralId: tokens.refId || undefined, userSubscription: profile.userSubscription} as User
-    }}),
+    },
+    clientId: process.env.AUTH_GOOGLE_ID,
+    clientSecret: process.env.AUTH_GOOGLE_SECRET}),
     CredentialsProvider({
       name: "Sign in",
       id: "credentials",
