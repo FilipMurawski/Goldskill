@@ -23,7 +23,7 @@ const EmailFooter = () => {
                     <p>Zespół Golskill</p>
                 </p>
                 <p>
-                    <a href="mailto:biuro@GoldSkill.pl" className='block no-underline'>biuro@goldskill.pl</a>
+                    <a href="mailto:biuro@goldskill.pl" className='block no-underline'>biuro@goldskill.pl</a>
                     <a href="https://discord.gg/68JWBSpJKD" className='block no-underline'>GoldSkill_TradeAcademy</a>
                     <a href="https://www.GoldSkill.pl" className='block no-underline'>Nasza strona</a>
                 </p>

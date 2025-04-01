@@ -1,4 +1,3 @@
-import Button from "../button"
 import { EmailFooter } from "../email-template"
 
 interface ConfirmEmailProps {
@@ -14,7 +13,7 @@ export const ConfirmEmailEmailTemplate: React.FC<Readonly<ConfirmEmailProps>> = 
     <article>
     <p>Dziękujemy za rejestrację w GoldSkill! Jesteś na końcu formalności.</p>
     <p>Dokończ proces zakładania konta, klikając w poniższy przycisk, aby potwierdzić swój adres e-mail:</p>
-    <Button type="button" width={"200px"}><a href={confirmationLink}>Potwierdź adres e-mail</a></Button>
+    <a href={confirmationLink}>Potwierdź adres e-mail</a>
     <p>Jeśli nie rejestrowałaś/eś się na naszej platformie, zignoruj tego maila.</p>
     </article>
     <EmailFooter />

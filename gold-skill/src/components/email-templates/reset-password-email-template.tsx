@@ -15,7 +15,7 @@ export const ResetPasswordEmailTemplate:React.FC<Readonly<ResetPasswordEmailProp
     <article>
     <p>Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta w GoldSkill.</p>
     <p>Ustaw nowe hasło, kliknij w poniższy przycisk:</p>
-    <Button type="button" width="100px"><a href={resetLink}>Resetuj hasło</a></Button>
+    <a href={resetLink}>Resetuj hasło</a>
     <p>Jeśli to nie Ty, zignoruj tego maila — Twoje dane są bezpieczne.</p>
     </article>
     <EmailFooter/>
