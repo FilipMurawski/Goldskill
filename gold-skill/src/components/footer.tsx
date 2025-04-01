@@ -24,7 +24,7 @@ const Footer = ({type}: {type: "front" | "panel"}): React.ReactNode => {
       <p className="text-base font-bold tracking-wide text-gray-900">Kontakt</p>
       <div className="flex">
         <p className="mr-1 text-gray-800">Email:</p>
-        <a href="mailto:biuro@GoldSkill.pl" aria-label="Our email" title="Our email" className="transition-colors duration-300 text-blue-400 hover:text-purple-700">biuro@GoldSkill.pl</a>
+        <a href="mailto:biuro@goldskill.pl" aria-label="Our email" title="Our email" className="transition-colors duration-300 text-blue-400 hover:text-purple-700">biuro@goldskill.pl</a>
       </div>
       <div className="flex">
         <p className="mr-1 text-gray-800">NIP:</p>
