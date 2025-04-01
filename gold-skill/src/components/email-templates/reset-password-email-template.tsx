@@ -1,3 +1,4 @@
+import Button from "../button";
 import { EmailFooter } from "../email-template";
 
 
@@ -14,7 +15,7 @@ export const ResetPasswordEmailTemplate:React.FC<Readonly<ResetPasswordEmailProp
     <article>
     <p>Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta w GoldSkill.</p>
     <p>Ustaw nowe hasło, kliknij w poniższy przycisk:</p>
-    <a href={resetLink} className='inline-block bg-[#28a745] text-white no-underline rounded-sm mx-2 p-2'>Resetuj hasło</a>
+    <Button type="button" width="100px"><a href={resetLink}>Resetuj hasło</a></Button>
     <p>Jeśli to nie Ty, zignoruj tego maila — Twoje dane są bezpieczne.</p>
     </article>
     <EmailFooter/>
