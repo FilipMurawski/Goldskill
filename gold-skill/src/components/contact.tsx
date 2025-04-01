@@ -23,7 +23,7 @@ const Contact = () => {
     })
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         // Handle proper submit here
-        sendMail({from: "no-reply@goldskill.pl", to: "biuro@goldskill.pl",subject: "Formularz kontaktowy od GoldSkill", type: "contact", message: data.message, Contactemail: data.email, name: data.name})
+        sendMail({from: "no-reply@goldskill.pl", to: "GoldSkill.TradeGroup@gmail.com",subject: "Formularz kontaktowy od GoldSkill", type: "contact", message: data.message, Contactemail: data.email, name: data.name})
         console.log(data);
         reset()    
     };

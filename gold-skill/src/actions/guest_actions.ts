@@ -127,7 +127,7 @@ export async function SignIn({provider,redirect, email, password, refId}: {provi
   if (provider ==  "credentials" && password !== undefined) {
     return await signIn(provider, {redirect, email, password})
   } else {
-    return refId ? await signIn(provider, {callbackUrl: `https://www.goldskill.pl/panel`, refId: refId}) : await signIn(provider, {callbackUrl: `https://www.goldskill.pl/panel`})
+    return refId ? await signIn(provider, { refId: refId}) : await signIn(provider)
   }
 }
 
