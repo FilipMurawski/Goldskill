@@ -102,7 +102,7 @@ export async function resetPassword( formData: FormData ) {
         const resetUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${resetToken}`;
 
         await sendMail({
-            from: "GoldSkill.TradeGroup@gmail.com",
+            from: "no-reply@goldskill.pl",
             to: user.email,
             type: "reset-password",
             subject: "Resetowanie hasła Goldskill",
@@ -179,7 +179,7 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
             const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${verificationToken}`;
 
             await sendMail({
-                from: "GoldSkill.TradeGroup@gmail.com",
+                from: "no-reply@goldskill.pl",
                 to: email,
                 type: "confirm-email",
                 subject: "Potwierdź swój email z Goldskill",

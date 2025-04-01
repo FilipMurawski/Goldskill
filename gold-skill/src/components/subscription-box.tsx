@@ -23,7 +23,7 @@ fullcost: string}) => {
                     {
                 fullcost ?
                  <span className="text-red-500 text-3xl line-through">{fullcost} €</span> :
-                <span className="text-gray-600 text-3xl"> bez zniżki </span>
+                <span className="text-gray-600 text-3xl"> cena standard </span>
                 }
                     
                 </div>

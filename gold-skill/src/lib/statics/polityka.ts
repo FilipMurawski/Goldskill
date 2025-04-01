@@ -3,7 +3,7 @@ const polityka = {
     header: "Polityka Prywatności Akademii Edukacyjnej GoldSkill",
     sections: [{
         header: "§1. Postanowienia ogólne",
-        texts: ["1.1. Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych użytkowników oraz partnerów Akademii Edukacyjnej GoldSkill („Akademia”), zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO), ustawą o ochronie danych osobowych oraz innymi obowiązującymi przepisami prawa polskiego.","1.2. Administratorem danych osobowych jest Akademia Edukacyjna GoldSkill z siedzibą w Polsce, ul. M. Rataja 46, 87-200 Wąbrzeźno.","1.3. Kontakt z Administratorem w sprawach dotyczących ochrony danych osobowych możliwy jest pod adresem e-mail: goldskill.tradegroup@gmail.com."]
+        texts: ["1.1. Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych osobowych użytkowników oraz partnerów Akademii Edukacyjnej GoldSkill („Akademia”), zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. (RODO), ustawą o ochronie danych osobowych oraz innymi obowiązującymi przepisami prawa polskiego.","1.2. Administratorem danych osobowych jest Akademia Edukacyjna GoldSkill z siedzibą w Polsce, ul. M. Rataja 46, 87-200 Wąbrzeźno.","1.3. Kontakt z Administratorem w sprawach dotyczących ochrony danych osobowych możliwy jest pod adresem e-mail: biuro@GoldSkill.pl."]
     },
     {
        header: "§2. Cele i podstawy prawne przetwarzania danych osobowych",

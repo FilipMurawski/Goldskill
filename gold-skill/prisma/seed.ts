@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 
 // type Role = "ADMIN" | "USER" | "ACTIVE_USER"
 
-
 const initialSubscriptions: Prisma.SubscriptionCreateInput[] = [
     {
         id: '123',
@@ -106,23 +105,6 @@ async function main() {
             });
         }
         console.log('Inserted subscriptions ✅');
-        await prisma.user.upsert({
-            where: { id: 'admin' },
-            update: {},
-            create: {
-                id: 'admin',
-                email: 'GoldSkill.TradeGroup@gmail.com',
-                name: 'Goldskill',
-                password: '',
-                hasRODOAgreement: true,
-                hasMarketingAgreement: true,
-                referenceId: 'main',
-                role: 'ADMIN',
-                isActive: true,
-                partnerId: null
-            }
-        })
-        console.log('Inserted admin ✅');
 
         console.log('Seeding finished ...');
         return;
@@ -136,24 +118,6 @@ async function main() {
         });
     }
     console.log('Inserted subscriptions ✅');
-    await prisma.user.upsert({
-        where: { id: 'admin' },
-        update: {},
-        create: {
-            id: 'admin',
-            email: 'GoldSkill.TradeGroup@gmail.com',
-            name: 'Goldskill',
-            password: '',
-            hasRODOAgreement: true,
-            hasMarketingAgreement: true,
-            referenceId: 'main',
-            role: 'ADMIN',
-            isActive: true,
-            partnerId: null
-        }
-    })
-
-    console.log('Inserted admin ✅');
 
     // // Insert users
     // for (const user of initialUsers) {

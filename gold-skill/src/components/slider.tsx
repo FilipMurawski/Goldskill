@@ -18,7 +18,6 @@ const Slider = ({educators}:{educators: educator[]}) => {
             { position: 0, el: document.getElementById('carousel-item-1') as HTMLElement},
             { position: 1, el: document.getElementById('carousel-item-2') as HTMLElement},
             { position: 2, el: document.getElementById('carousel-item-3') as HTMLElement},
-            { position: 3, el: document.getElementById('carousel-item-4') as HTMLElement},
         ];
     
         const options = {
@@ -31,7 +30,6 @@ const Slider = ({educators}:{educators: educator[]}) => {
                     { position: 0, el: document.getElementById('carousel-indicator-1') as HTMLElement },
                     { position: 1, el: document.getElementById('carousel-indicator-2') as HTMLElement},
                     { position: 2, el: document.getElementById('carousel-indicator-3') as HTMLElement},
-                    { position: 3, el: document.getElementById('carousel-indicator-4') as HTMLElement},
                 ],
             },
             onNext: () => console.log('Next slide'),
@@ -58,7 +56,7 @@ const Slider = ({educators}:{educators: educator[]}) => {
     return (
         <div id="carousel-example" ref={carouselRef} className="relative w-full lg:w-[50%]">
             <div className="relative  overflow-clip rounded-lg min-h-[60vh]">
-                {[1, 2, 3, 4].map((num) => (
+                {[1, 2, 3].map((num) => (
                     <div key={num} id={`carousel-item-${num}`} className="hidden duration-700 ease-in-out">
                         <div className='w-[100%] flex items-top justify-center h-[100%]'>
                         <li className=" p-6  md:p-8 border border-gray-100 rounded-3xl bg-white  shadow-2xl shadow-gray-600/10 list-none w-[90%] md:w-[60%] text-sm md:text-base">
@@ -76,7 +74,7 @@ const Slider = ({educators}:{educators: educator[]}) => {
                 ))}
             </div>
             <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse">
-                {[1, 2, 3, 4].map((num) => (
+                {[1, 2, 3].map((num) => (
                     <button key={num} id={`carousel-indicator-${num}`} className="h-3 w-3 rounded-full" aria-label={`Slide ${num}`}></button>
                 ))}
             </div>
