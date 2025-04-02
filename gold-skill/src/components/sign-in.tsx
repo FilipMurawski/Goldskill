@@ -5,6 +5,7 @@ import Button from "./button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Social_button } from "./social-button";
 import { redirect } from "next/navigation";
+import { useState } from "react";
 
 
 
@@ -16,6 +17,7 @@ type Inputes = {
 }
 
 const Signer = ({type, refId}: {type: "sign-in" | "sign-up", refId: string | undefined}) => {
+    const [notification, setNotification] = useState<string | null>(null);
     const {
         register,
         handleSubmit,
@@ -27,17 +29,36 @@ const Signer = ({type, refId}: {type: "sign-in" | "sign-up", refId: string | und
         mode: "onBlur"
     })
     const onSubmitHandler: SubmitHandler<Inputes> = async  (data) => {
+        setNotification(null);
         if (type === "sign-in") {
-            SignIn({provider: "credentials",
+            const response = await SignIn({provider: "credentials",
                 redirect: false,
                 email: data.email,
-                password: data.password
-        })} else if (type === "sign-up") {
-            SignUp({
+                password: data.password})
+            if (response?.error) {
+                if (response.error === "Invalid credentials") {
+                        setNotification("Nieprawidłowe dane logowania.");
+                } else if (response.error === "Email not confirmed") {
+                        setNotification("Twój email nie został potwierdzony. Sprawdź swoją skrzynkę pocztową.");
+                } else {
+                        setNotification("Wystąpił nieoczekiwany błąd. Spróbuj ponownie.");
+                }
+            }    
+    } else if (type === "sign-up") {
+            const response = await SignUp({
                 email: data.email,
                 password: data.password,
                 refId: refId ? refId : null
-            }).then(()=> redirect("/sign-in?alert=confirm-email"))
+            })
+            if (response?.json.arguments.error) {
+                if (response.json.arguments.error === "Email already exists") {
+                    setNotification("Ten email jest już zarejestrowany.");
+                } else {
+                    setNotification("Wystąpił nieoczekiwany błąd. Spróbuj ponownie.");
+                }
+            } else {
+                redirect("/sign-in?alert=confirm-email");
+            }
         }
     };
     
@@ -82,6 +103,11 @@ const Signer = ({type, refId}: {type: "sign-in" | "sign-up", refId: string | und
 
     return (
         <>
+                    {notification && (
+                <div className="mb-4 text-center text-red-600 font-medium">
+                    {notification}
+                </div>
+            )}
             <Social_button alt="Logo Google" name="google" path="/google.svg" text={`${type === "sign-in" ? "Zaloguj" : "Zarejestruj"} się z Google`} click={(e) => {
         if (type === "sign-up" && !getValues().hasRODOAgreement) {
             e.preventDefault();

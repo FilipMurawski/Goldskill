@@ -31,6 +31,9 @@ const Home = async () => {
       <Button type="button" width={"240px"} reference="/sign-up">
       Rozpocznij swoją edukacyjną podróż 🚀
       </Button>
+      <Button type="button" width={"240px"} reference="https://discord.gg/68JWBSpJKD">
+      Dołącz do naszego Discorda 🚀
+      </Button>
     </section>
     <Section id="dlaczego" wrap="no-wrap">
       <Image src="/Young man.png" alt="young man" className="w-[90%] sm:w-[50%] min-w-[16rem]" width={600} height={1200}/>

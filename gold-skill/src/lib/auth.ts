@@ -17,17 +17,21 @@ class NotVerifiedError extends CredentialsSignin {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
-    Facebook({async profile(profile, tokens) {
+    Facebook({ 
+      clientId: process.env.AUTH_FACEBOOK_ID,
+      clientSecret: process.env.AUTH_FACEBOOK_SECRET,
+      async profile(profile, tokens) {
+      return { role: profile.role ?? "USER", id: profile.id, name: profile.name, email: profile.email, isActive: profile.isActive, referralId: tokens.refId || undefined, userSubscription: profile.userSubscription} as User
+    }}),
+    google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      async profile(profile, tokens){
       return { role: profile.role ?? "USER", id: profile.id, name: profile.name, email: profile.email, isActive: profile.isActive, referralId: tokens.refId || undefined, userSubscription: profile.userSubscription} as User
     },
-    clientId: process.env.AUTH_FACEBOOK_ID,
-    clientSecret: process.env.AUTH_FACEBOOK_SECRET}),
-    google({async profile(profile, tokens){
-      return { role: profile.role ?? "USER", id: profile.id, name: profile.name, email: profile.email, isActive: profile.isActive, referralId: tokens.refId || undefined, userSubscription: profile.userSubscription} as User
-    },
-    clientId: process.env.AUTH_GOOGLE_ID,
-    clientSecret: process.env.AUTH_GOOGLE_SECRET}),
+}),
     CredentialsProvider({
       name: "Sign in",
       id: "credentials",
@@ -72,7 +76,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new CredentialsSignin("Invalid credentials");
         }
         if (user.emailVerified === null) {
-          throw new NotVerifiedError();
+          throw new NotVerifiedError("Email not confirmed");
         }
         return {
           id: user.id,

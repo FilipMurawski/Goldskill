@@ -141,7 +141,8 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
                 }
             })
             if(existingUser){
-                throw new Error("Email already exists");
+                const response = Response.json({error: "Email already exists"}, {status: 400});
+                 return response
             }
             const hashedPassword = await hashPassword(password)
             // Prepare the data
@@ -183,7 +184,7 @@ export async function SignUp({ email, password, refId}: { email: string, passwor
                 subject: "Potwierdź swój email z Goldskill",
                 confirmationLink: confirmLink
             });
-            return 
+            
         }
         catch (error) {
             throw new Error(`Error during sign-up: ${error}`);
