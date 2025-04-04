@@ -157,7 +157,7 @@ const Signer = ({type, refId}: {type: "sign-in" | "sign-up", refId: string | und
                                 <div className="flex items-center">
                                 <input id="hasRODOAgreement" type="checkbox" {...register("hasRODOAgreement", validations.hasRODOAgreement)} className="mr-2 border-black rounded-sm hover:cursor-pointer"/>
                                 <label className="text-sm text-gray-600" id="hasRODOAgreement">
-                                    Akceptuję   <a href="/polityka-prywatnosci" target="_blank" className="font-medium text-blue-500 hover:text-blue-600"> politykę prywatności</a> oraz jestem świadomy ryzyka inwestycyjnego <a href="/ostrzezenie-o-ryzyku" target="_blank" className="font-medium text-blue-500 hover:text-blue-600"> Ostrzeżenie o ryzyku </a>
+                                    Akceptuję   <a href="/polityka-prywatnosci" target="_blank" className="font-medium text-blue-500 hover:text-blue-600"> politykę prywatności</a>, <a href="/regulamin" target="_blank" className="font-medium text-blue-500 hover:text-blue-600"> regulamin </a> oraz jestem świadomy ryzyka inwestycyjnego <a href="/ostrzezenie-o-ryzyku" target="_blank" className="font-medium text-blue-500 hover:text-blue-600"> Ostrzeżenie o ryzyku </a>
                                 </label>
                                 </div>
                                 <span className="text-red-600">
