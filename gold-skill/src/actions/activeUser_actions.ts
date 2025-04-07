@@ -3,19 +3,82 @@
 import prisma from "@/lib/db";
 import { User } from "@prisma/client";
 import { subDays } from "date-fns";
+import { paymentRegistration } from "./background_actions";
 
-export async function updateSelfUserSubscription(formData: FormData, userId: string) {
-    try {    await prisma.userSubscription.create({
-        data: {
-            userId: userId as string,
-            subscriptionId: formData.get('subscriptionId') as string,
-        }
-    })}
-    catch (error) {
-        throw new Error(`Error updating subscription: ${error}`);
+
+export async function deleteUserSubscription(userSubscriptionId: string) {
+    try {
+        await prisma.userSubscription.update({
+            where: { id: userSubscriptionId },
+            data: { isActive: false },
+        });
+        return null;
+    } catch (error) {
+        const response = Response.json({error: "Error deleting subscription"}, {status: 400});
+        return response
     }
-
 }
+
+export async function CreateUserSubscription(userId: string, subscriptionId: string, currency?: string) {
+    if (!userId || !subscriptionId) {
+        throw new Error("User ID and Subscription ID are required.");
+    };
+    try {
+        const user = await prisma.user.findUnique({where: { id: userId }});
+        if (!user) {
+            const response = Response.json({error: "User not found."}, {status: 400});
+            return response
+        }
+
+        const userSubscription = await prisma.userSubscription.findFirst({
+            where: { userId },
+            include: {
+                subscription: true,
+            },
+        });
+        if (userSubscription?.subscriptionId === subscriptionId) {
+            const response = Response.json({error: "User already subscribed to this subscription."}, {status: 400});
+            return response
+        }
+        if (userSubscription?.subscriptionId === "999" && userSubscription?.subscription?.isActive) {
+            const response = Response.json({error: "Lifetime users can't create subscriptions"}, {status: 400});
+            return response
+        }
+        const wantedSub =  await prisma.subscription.findUnique({
+            where: { id: subscriptionId },})
+        if (!wantedSub) {
+            const response = Response.json({error: "Subscription not found."}, {status: 400});
+            return response
+        }
+        const whichCurrency = currency ? currency : wantedSub.currency
+        const price = whichCurrency === "EUR" ? wantedSub.price : wantedSub.price * 4.39; // Example conversion rate
+        const payment = await prisma.payment.create({
+            data: {
+                userId,
+                subscriptionId,
+                amount: price,
+                currency: whichCurrency,
+                createdAt: new Date(),
+                status: "UNCONFIRMED",
+            },
+        })
+        if (!payment) {
+            const response = Response.json({error: "Payment not created."}, {status: 400});
+            return response
+        }
+        if (!user.email) {
+            throw new Error("User email not found or does not exist");
+        }
+        const paymentToken = await paymentRegistration(userId, wantedSub, price, whichCurrency, user.email, payment.id);
+        const paymentUrl = `https://secure.przelewy24.pl/trnRequest/${paymentToken}`
+        const response = Response.redirect(paymentUrl, 302);
+        return response
+    } catch (error) {
+        const response = Response.json({error: error}, {status: 400});
+        return response
+    }
+}
+
 
 export async function getUserHierarchy(userId: string, depth = 3, isAdmin = false) {
     if (depth === 0 && !isAdmin) return [];
@@ -108,3 +171,5 @@ if ((depth > 1 || isAdmin) && users) {
 }
     return result;
 }
+
+

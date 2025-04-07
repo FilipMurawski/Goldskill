@@ -10,7 +10,7 @@ datasource db {
 model User {
   id                      String                  @id @default(cuid())
   createdAt               DateTime                @default(now())
-  email                   String?                 @unique
+  email                   String                  @unique
   name                    String?
   role                    Role                    @default(USER)
   isActive                Boolean                 @default(true)
@@ -44,6 +44,9 @@ model Payment {
   currency           String
   subscriptionId     String
   userSubscriptionId String?
+  status             PaymentStatus     @default(UNCONFIRMED)
+  updatedAt          DateTime?         @updatedAt
+  orderId            String?
   subscription       Subscription      @relation(fields: [subscriptionId], references: [id])
   user               User              @relation(fields: [userId], references: [id])
   UserSubscription   UserSubscription? @relation(fields: [userSubscriptionId], references: [id])
@@ -68,6 +71,7 @@ model UserSubscription {
   subscriptionId String
   createdAt      DateTime     @default(now())
   updatedAt      DateTime?    @updatedAt
+  shouldEndAt    DateTime?
   isActive       Boolean      @default(true)
   payments       Payment[]
   subscription   Subscription @relation(fields: [subscriptionId], references: [id])
@@ -138,4 +142,11 @@ enum Role {
   USER
   ADMIN
   ACTIVE_USER
+}
+
+enum PaymentStatus {
+  UNCONFIRMED
+  VERIFIED
+  FAILED
+  REFUNDED
 }

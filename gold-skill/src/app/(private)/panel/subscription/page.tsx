@@ -23,7 +23,7 @@ export default async function UsersPage() {
     return (
         <div className="flex flex-col gap-5">
             <Header size="small">Subskrybcja</Header>
-            <Subscription leftdays={leftdays} subscription={(activeSubscription && activeSubscription.length > 0) ? activeSubscription : undefined} subscriptions={subscriptions}/>
+            <Subscription userId={session.user.id} leftdays={leftdays} subscription={(activeSubscription && activeSubscription.length > 0) ? activeSubscription : undefined} subscriptions={subscriptions}/>
         </div>
     )
 }

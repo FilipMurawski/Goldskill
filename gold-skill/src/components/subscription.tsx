@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Button from "./button";
 import { SubscriptionBox } from "./subscription-box";
+import { CreateUserSubscription, deleteUserSubscription} from "@/actions/activeUser_actions";
 
-const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string | number ,subscription: {
+
+const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: string | undefined,leftdays: string | number ,subscription: {
   subscription: {
       id: string;
       name: string;
@@ -32,39 +34,54 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
         isActive: boolean;
 }[]
 }) => {
-
-    const [currentSubscription] = useState(subscription)
-    const [currentDaysLeft] = useState(leftdays)
+    const [notification, setNotification] = useState<{message: string | null, type: "error" | "success"}>({message: null, type: "error"});
+    const [currentSubscription] = useState(subscription);
+    const [currentDaysLeft] = useState(leftdays);
     const [isCancelModalOpen, setCancelModalOpen] = useState(false);
-    const [isChanging, setChanging] = useState(false)
-    const [isChangeModalOpen, setChangeModalOpen] = useState(false)
+    const [isChanging, setChanging] = useState(false);
+    const [isChangeModalOpen, setChangeModalOpen] = useState(false);
+    const [wantedSubscription, setWantedSubscription] = useState<string | null>(null);
 
-    const handleCancel = async () => {
-         setCancelModalOpen(true);
-    }
-
-    const confirmCancel = () => {
-        console.log("Subscription canceled");
+    const confirmCancel = async () => {
+       setNotification({message: null, type: "error"});
+       if (!userId) return;
         setCancelModalOpen(false);
-        // TODO: Add API call to cancel subscription
+        if (!currentSubscription) return;
+        const response = await deleteUserSubscription(currentSubscription[0].subscription.id)
+        if ( response) {
+          setNotification({message: "Wystąpił błąd podczas anulowania subskrybcji", type: "error"});
+        } else {    
+          setNotification({message: "Subskrybcja anulowana pomyślnie.", type: "success"});
+        }
       };
 
-    const handleBack = () => {
-        setChanging(false)
-    }
-
-    const handleChange = () => {
+    const handleChange = (subscriptionId: string) => {
+      setWantedSubscription(subscriptionId);
         setChangeModalOpen(true);
     }
-    const confirmChange = () => {
+    const confirmChange = async() => {
+        setNotification({message: null, type: "error"});
+        if (!wantedSubscription) return;
+        if (!userId) return;
         console.log("Subscription changed");
         setChangeModalOpen(false);
-        // TODO: Add API call to change subscription
-    }
+        const response = await CreateUserSubscription(userId, wantedSubscription as string)
+
+        if(response && response.type === "error") {
+          setNotification({message: "Wystąpił błąd podczas zmiany subskrybcji", type: "error"});
+        }
+    } 
 
     return (
         <>
-        {isChanging && <Button type="button" width={"100px"} onClick={handleBack}>Cofnij</Button>}
+        {notification.message && (
+          <div>
+            <p className={`text-${notification.type === "error" ? "red" : "green"}-500`}>
+              {notification.message}
+            </p>
+          </div>
+        )}
+        {isChanging && <Button type="button" width={"100px"} onClick={() => setChanging(false)}>Cofnij</Button>}
         {!isChanging && <div className="p-6 border rounded-lg shadow-md bg-white max-w-lg">
          {currentSubscription ? (
           <div className="flex flex-col gap-3">
@@ -84,7 +101,7 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
             {currentSubscription[0].subscription.name.toLowerCase() !== "lifetime" && (
               <div className="mt-4 flex gap-4">
                 <Button type="button" width={"100px"} onClick={() => setChanging(true)}>Zmień</Button>
-                <Button type={"button"} width={"100px"} onClick={handleCancel}>Anuluj</Button>
+                <Button type={"button"} width={"100px"} onClick={() => setChanging(false)}>Anuluj</Button>
               </div>
             )}
           </div>
@@ -98,7 +115,7 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
         {isChanging && <ul className="grid lg:grid-cols-3 gap-8 grid-cols-1">
         {
         subscriptions.filter((s)=>s.isActive && s.price !== 0).map((subscription) => {return (
-          <SubscriptionBox goBack={handleBack} confirm={handleChange}type="regular"{...subscription} fullcost={subscription.price === 99 ? "" : subscription.price === 499 ? "595" : "1188"} key={subscription.id} isSelected={currentSubscription && subscription.id === currentSubscription[0].subscription.id}/>
+          <SubscriptionBox goBack={() => setChanging(false)} confirm={ () => handleChange(subscription.id)}type="regular"{...subscription} fullcost={subscription.price === 99 ? "" : subscription.price === 499 ? "595" : "1188"} key={subscription.id} isSelected={currentSubscription && subscription.id === currentSubscription[0].subscription.id}/>
         )})
         }
       </ul>}
@@ -118,12 +135,12 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
           </div>
         </div>
       )}
-      {isChangeModalOpen && (
+      {isChangeModalOpen && (currentSubscription && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
             <h3 className="text-lg font-bold text-gray-900">Chcesz zmienić subskrybcję?</h3>
             <p className="text-gray-700 mt-2">
-                Jeśli ją zmienisz, Twoja subskrybcja pozostanie aktywana do końca aktualnego okresu. Zostaniesz przeniesiony do okna płatności, a nowa subskrybcja zacznie działać po upływie aktualnej.
+                Jeśli ją zmienisz, Twoja subskrybcja pozostanie aktywana do końca aktualnego okresu. Zostaniesz przeniesiony do strony płatności Przelewy24, a nowa subskrybcja zacznie działać po upływie aktualnej.
             </p>
             <div className="mt-4 flex justify-end space-x-4">
             <Button type="button" width={"100px"} onClick={() => setChangeModalOpen(false)}>Cofnij</Button>
@@ -131,7 +148,19 @@ const Subscription = ({subscription, leftdays, subscriptions}: {leftdays: string
             </div>
           </div>
         </div>
-      )}
+      )) || 
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
+        <h3 className="text-lg font-bold text-gray-900">Chcesz kupić subskrybcję?</h3>
+        <p className="text-gray-700 mt-2">
+            Zostaniesz przeniesiony do strony płatności Przelewy24 i po zakończeniu płatności Twoja subskrybcja zacznie działać od razu.
+        </p>
+        <div className="mt-4 flex justify-end space-x-4">
+        <Button type="button" width={"100px"} onClick={() => setChangeModalOpen(false)}>Cofnij</Button>
+        <Button type={"button"} width={"200px"} onClick={confirmChange}>Kup subskrybcję</Button>
+        </div>
+      </div>
+    </div>}
     </>
     );
   };
