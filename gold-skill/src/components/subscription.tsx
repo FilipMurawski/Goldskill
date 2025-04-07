@@ -49,9 +49,9 @@ const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: 
         if (!currentSubscription) return;
         const response = await deleteUserSubscription(currentSubscription[0].subscription.id)
         if ( response) {
-          setNotification({message: "Wystąpił błąd podczas anulowania subskrybcji", type: "error"});
+          setNotification({message: "Wystąpił błąd podczas anulowania subskrypcji", type: "error"});
         } else {    
-          setNotification({message: "Subskrybcja anulowana pomyślnie.", type: "success"});
+          setNotification({message: "Subskrypcja anulowana pomyślnie.", type: "success"});
         }
       };
 
@@ -68,7 +68,7 @@ const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: 
         const response = await CreateUserSubscription(userId, wantedSubscription as string)
 
         if(response && response.type === "error") {
-          setNotification({message: "Wystąpił błąd podczas zmiany subskrybcji", type: "error"});
+          setNotification({message: "Wystąpił błąd podczas zmiany subskrypcji", type: "error"});
         }
     } 
 
@@ -86,15 +86,15 @@ const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: 
          {currentSubscription ? (
           <div className="flex flex-col gap-3">
             <h2 className="text-xl font-bold text-gray-900">
-              Aktywna subskrybcja: {currentSubscription[0].subscription.name}
+              Aktywna subskrypcja: {currentSubscription[0].subscription.name}
             </h2>
             {currentSubscription[0].subscription.description.split(',').map((text) => {
                 return <p className="text-gray-700" key={text}>{text}</p>;
   
             })}
             <p className="text-gray-600 mt-2">
-              {currentSubscription[0].subscription.period === 999 ? "Subskrybcja na zawsze" : currentDaysLeft === 0
-                ? "Twoja subskrybcja się skończyła"
+              {currentSubscription[0].subscription.period === 999 ? "Subskrypcja na zawsze" : currentDaysLeft === 0
+                ? "Twoja subskrypcja się skończyła"
                 : `Pozostało dni: ${currentDaysLeft}`}
             </p>
   
@@ -107,8 +107,8 @@ const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: 
           </div>
         ) : (
           <div className="text-center">
-            <p className="text-gray-700">Nie masz aktywnej subskrybcji.</p>
-            <Button type="button" width={"200px"} onClick={() => setChanging(true)}>Wybierz subskrybcję</Button>
+            <p className="text-gray-700">Nie masz aktywnej subskrypcji.</p>
+            <Button type="button" width={"200px"} onClick={() => setChanging(true)}>Wybierz subskrypcję</Button>
           </div>
         )}
         </div>}
@@ -126,11 +126,11 @@ const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: 
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
             <h3 className="text-lg font-bold text-gray-900">Chcesz anulować subskrybcję?</h3>
             <p className="text-gray-700 mt-2">
-                Jeśli ją anulujesz, Twoja subskrybcja pozostanie aktywana do końca aktualnego okresu. Kolejna płatność nie zostanie pobrana
+                Jeśli ją anulujesz, Twoja subskrypcja pozostanie aktywana do końca aktualnego okresu. Kolejna płatność nie zostanie pobrana
             </p>
             <div className="mt-4 flex justify-end space-x-4">
             <Button type="button" width={"100px"} onClick={() => setCancelModalOpen(false)}>Cofnij</Button>
-            <Button type={"button"} width={"200px"} onClick={confirmCancel}>Anuluj subskrybcję</Button>
+            <Button type={"button"} width={"200px"} onClick={confirmCancel}>Anuluj subskrypcję</Button>
             </div>
           </div>
         </div>
@@ -140,27 +140,27 @@ const Subscription = ({subscription, leftdays, subscriptions, userId}: {userId: 
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
             <h3 className="text-lg font-bold text-gray-900">Chcesz zmienić subskrybcję?</h3>
             <p className="text-gray-700 mt-2">
-                Jeśli ją zmienisz, Twoja subskrybcja pozostanie aktywana do końca aktualnego okresu. Zostaniesz przeniesiony do strony płatności Przelewy24, a nowa subskrybcja zacznie działać po upływie aktualnej.
+                Jeśli ją zmienisz, Twoja subskrypcja pozostanie aktywana do końca aktualnego okresu. Zostaniesz przeniesiony do strony płatności Przelewy24, a nowa subskrypcja zacznie działać po upływie aktualnej.
             </p>
             <div className="mt-4 flex justify-end space-x-4">
             <Button type="button" width={"100px"} onClick={() => setChangeModalOpen(false)}>Cofnij</Button>
-            <Button type={"button"} width={"200px"} onClick={confirmChange}>Zmień subskrybcję</Button>
+            <Button type={"button"} width={"200px"} onClick={confirmChange}>Zmień subsprybcję</Button>
             </div>
           </div>
         </div>
-      )) || 
+      ) || 
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
-        <h3 className="text-lg font-bold text-gray-900">Chcesz kupić subskrybcję?</h3>
+        <h3 className="text-lg font-bold text-gray-900">Chcesz kupić subskrypcję?</h3>
         <p className="text-gray-700 mt-2">
-            Zostaniesz przeniesiony do strony płatności Przelewy24 i po zakończeniu płatności Twoja subskrybcja zacznie działać od razu.
+            Zostaniesz przeniesiony do strony płatności Przelewy24 i po zakończeniu płatności Twoja subskrypcja zacznie działać od razu.
         </p>
         <div className="mt-4 flex justify-end space-x-4">
         <Button type="button" width={"100px"} onClick={() => setChangeModalOpen(false)}>Cofnij</Button>
-        <Button type={"button"} width={"200px"} onClick={confirmChange}>Kup subskrybcję</Button>
+        <Button type={"button"} width={"200px"} onClick={confirmChange}>Kup subskrypcję</Button>
         </div>
       </div>
-    </div>}
+    </div>)}
     </>
     );
   };

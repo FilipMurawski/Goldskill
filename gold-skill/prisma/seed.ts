@@ -28,7 +28,7 @@ const initialSubscriptions: Prisma.SubscriptionCreateInput[] = [
         name: 'Pakiet roczny',
         currency: 'EUR',
         price: 998,
-        description: '💰 Pełna transformacja w skutecznego tradera,📊 Kompleksowa wiedza i praktyka,🚀 Elitarne środowisko i unikalne okazje',
+        description: '💰 Pełna transformacja w tradera,📊 Kompleksowa wiedza i praktyka,🚀 Elitarne środowisko i unikalne okazje',
         period: 360,
         isActive: true
     },
