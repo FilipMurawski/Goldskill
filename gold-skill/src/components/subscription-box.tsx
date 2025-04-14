@@ -31,13 +31,18 @@ fullcost: string}) => {
                     <span className="font-bold text-3xl">{price} €</span>
                     <span className="text-gray-600">/ {period === 30 ? "miesiąc" : period === 180 ? "6 miesięcy" : "rok"}</span>
                 </div>
+                {fullcost &&<>      
+                <div className="mt-2 text-gray-700">(ok. 83 € / miesiąc)</div>
+                <div className="mt-2 text-gray-800">Oszczędź {period === 180 ? 95 : 190} € w porównaniu do miesięcznej subskrypcji.</div>
+                </>
+                }
                 <div className="mt-6 text-left">
                     {description.split(",").map(text => {
                         return <p key={text} className=" mt-2">{text}</p>
                     })}
                 </div>
                 <div className="mt-8 flex items-center justify-center">
-                    {isSelected ? <Button type="button" width={"10rem"} onClick={goBack}>Cofnij</Button> : <Button type="button" width={"10rem"} onClick={type === "regular" ? confirm : undefined}reference={type === "front" ? `/payment/?id=${id}` : undefined}>{type === "front" ? "Rozpocznij" : "Wybierz"}</Button>}
+                    {isSelected ? <Button type="button" width={"10rem"} onClick={goBack}>Cofnij</Button> : <Button type="button" width={"10rem"} onClick={type === "regular" ? confirm : undefined}reference={type === "front" ? `/sign-up` : undefined}>{type === "front" ? "Rozpocznij" : "Wybierz"}</Button>}
                 </div>
             </div>
         </li>       
