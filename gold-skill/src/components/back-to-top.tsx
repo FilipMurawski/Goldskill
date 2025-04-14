@@ -17,6 +17,7 @@ const BackToTop = () => {
             style={{ opacity: scroll > 20 ? 1 : 0, pointerEvents: scroll > 20 ? "auto" : "none" }}
         >
             <button
+            title="Back to Top"
                 className="bg-gradient-to-b from-yellow-500 to-yellow-700 font-medium text-center text-black hover:text-white transition-colors duration-300 rounded-full w-10 h-10 flex items-center justify-center"
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
