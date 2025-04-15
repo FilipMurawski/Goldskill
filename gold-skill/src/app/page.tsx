@@ -47,10 +47,6 @@ const Home = async () => {
         </div>
       </div>
     </Section>
-    <Section id="edukatorzy" wrap="wrap">
-      <Header size="big" >Poznaj naszych ekspertów: </Header>
-      <Slider educators={educators}/>
-    </Section>
     <Section id="oferta" wrap="wrap">
       <Header size="big" >GoldSkill oferuje wszechstronną edukację, która obejmuje wszystkie kluczowe aspekty tradingu: </Header>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-8">
