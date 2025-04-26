@@ -13,6 +13,7 @@ const SubscriptionBox = ({name, period, description, id, price, fullcost, type, 
     goBack?: () => void,
     confirm?: () => void,
 fullcost: string}) => {
+    description = description === '💰 Pełna transformacja w skutecznego tradera,📊 Kompleksowa wiedza i praktyka,🚀 Elitarne środowisko i unikalne okazje' ? '💰 Pełna transformacja w tradera,📊 Kompleksowa wiedza i praktyka,🚀 Elitarne środowisko i unikalne okazje' : description;
     return (
         <li className="mt-4 max-w-sm mx-auto px-4" key={id}>
             <div className={`bg-white border rounded text-center px-4 pt-6 pb-8 shadow ${isSelected && "border-green-500 border-2"}`}>
