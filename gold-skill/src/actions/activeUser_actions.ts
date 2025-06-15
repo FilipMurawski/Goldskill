@@ -70,7 +70,8 @@ export async function CreateUserSubscription(userId: string, subscriptionId: str
             throw new Error("User email not found or does not exist");
         }
         const paymentToken = await paymentRegistration(userId, wantedSub, price, whichCurrency, user.email, payment.id);
-        const paymentUrl = `https://secure.przelewy24.pl/trnRequest/${paymentToken}`
+        const isDevelopment = true;
+        const paymentUrl = !isDevelopment ? `https://secure.przelewy24.pl/trnRequest/${paymentToken}` : `https://sandbox.przelewy24.pl/trnRequest/${paymentToken}`
         const response = Response.redirect(paymentUrl, 302);
         return response
     } catch (error) {

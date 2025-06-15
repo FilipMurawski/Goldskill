@@ -21,7 +21,7 @@ export async function paymentRegistration(userId: string, wantedSub: Subscriptio
         : "https://secure.przelewy24.pl/api/v1/transaction/register";
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": `Basic ${Buffer.from(`${process.env.PRZELEWY24_POS_ID}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`, // Replace with your actual authorization header
+        "Authorization": `Basic ${Buffer.from(`${process.env.PRZELEWY24_POS_ID}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`,
     };
 
     const params = {
@@ -31,11 +31,13 @@ export async function paymentRegistration(userId: string, wantedSub: Subscriptio
         currency: currency,
         crc: process.env.PRZELEWY24_CRC_KEY,
     }
+    console.log("params for the transaction are: ", params);
     
     const combinedSign = JSON.stringify(params)
     const sign = crypto.createHash("sha384").update(combinedSign).digest("hex")
 
-
+    console.log("Checksum for the transaction is: ", sign);
+    
     const body = {
         merchantId: process.env.PRZELEWY24_MERCHANT_ID,
         posId: process.env.PRZELEWY24_POS_ID,
