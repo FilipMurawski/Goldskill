@@ -32,10 +32,14 @@ export async function POST(req: Request) {
                 ? "https://sandbox.przelewy24.pl/api/v1/transaction/verify"
                 : "https://secure.przelewy24.pl/api/v1/transaction/verify";
 
+        if (!process.env.PRZELEWY24_POS_ID || !process.env.PRZELEWY24_API_KEY || !process.env.PRZELEWY24_MERCHANT_ID || !process.env.PRZELEWY24_CRC_KEY || !process.env.NEXT_PUBLIC_BASE_URL) {
+            throw new Error("Missing Przelewy24 credentials in environment variables.");
+        }
+
         // Prepare the verification request body
         const verificationBody = {
-            merchantId: process.env.PRZELEWY24_MERCHANT_ID,
-            posId: process.env.PRZELEWY24_POS_ID,
+            merchantId: parseInt(process.env.PRZELEWY24_MERCHANT_ID,10),
+            posId: parseInt(process.env.PRZELEWY24_POS_ID,10),
             sessionId: sessionId,
             amount: amount,
             currency: currency,
@@ -49,7 +53,7 @@ export async function POST(req: Request) {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Basic ${Buffer.from(
-                    `${process.env.PRZELEWY24_POS_ID}:${process.env.PRZELEWY24_API_KEY}`
+                    `${parseInt(process.env.PRZELEWY24_POS_ID,10)}:${process.env.PRZELEWY24_API_KEY}`
                 ).toString("base64")}`,
             },
             body: JSON.stringify(verificationBody),

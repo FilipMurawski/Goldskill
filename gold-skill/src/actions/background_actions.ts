@@ -21,31 +21,28 @@ export async function paymentRegistration(userId: string, wantedSub: Subscriptio
         : "https://secure.przelewy24.pl/api/v1/transaction/register";
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": `Basic ${Buffer.from(`${process.env.PRZELEWY24_POS_ID}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`,
+        "Authorization": `Basic ${Buffer.from(`${parseInt(process.env.PRZELEWY24_POS_ID,10)}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`,
     };
 
-    const params = {
-        sessionId: `${userId}-${paymentId}-${Date.now()}`,
-        merchantId: process.env.PRZELEWY24_MERCHANT_ID,
-        amount: Math.round(price * 100),
-        currency: currency,
-        crc: process.env.PRZELEWY24_CRC_KEY,
-    }
+    const params = {sessionId:`${userId}-${paymentId}-${Date.now()}`,merchantId:parseInt(process.env.PRZELEWY24_MERCHANT_ID,10),amount:Math.round(price * 100),currency:currency,crc: process.env.PRZELEWY24_CRC_KEY}
     console.log("params for the transaction are: ", params);
     
     const combinedSign = JSON.stringify(params)
+
+    console.log("combigned params for the transaction are: ", combinedSign);
     const sign = crypto.createHash("sha384").update(combinedSign).digest("hex")
 
     console.log("Checksum for the transaction is: ", sign);
-    
+
     const body = {
-        merchantId: process.env.PRZELEWY24_MERCHANT_ID,
-        posId: process.env.PRZELEWY24_POS_ID,
+        merchantId: parseInt(process.env.PRZELEWY24_MERCHANT_ID,10),
+        posId: parseInt(process.env.PRZELEWY24_POS_ID,10),
         sessionId: `${userId}-${paymentId}-${Date.now()}`,
         amount: Math.round(price * 100),
         currency: currency,
         description: `Płatność za ${wantedSub.name}`,
         email: userEmail,
+        method: 145,
         country: "PL",
         language: "pl", 
         urlReturn: `${process.env.NEXT_PUBLIC_BASE_URL}/panel/payments`,
@@ -102,7 +99,7 @@ async function getCardRefId(userId: string, wantedSub: Subscription) {
         : `https://secure.przelewy24.pl/api/v1/card/info/${orderId}`;
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": `Basic ${Buffer.from(`${process.env.PRZELEWY24_POS_ID}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`, // Replace with your actual authorization header
+        "Authorization": `Basic ${Buffer.from(`${parseInt(process.env.PRZELEWY24_POS_ID,10)}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`, // Replace with your actual authorization header
     };
 
     try {
@@ -188,7 +185,7 @@ export async function cardPaymentProcess(token: string) {
         : `https://secure.przelewy24.pl/api/v1/card/info/charge`;
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": `Basic ${Buffer.from(`${process.env.PRZELEWY24_POS_ID}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`, // Replace with your actual authorization header
+        "Authorization": `Basic ${Buffer.from(`${parseInt(process.env.PRZELEWY24_POS_ID,10)}:${process.env.PRZELEWY24_API_KEY}`).toString("base64")}`, // Replace with your actual authorization header
     };
     const body = {
         token: token
